@@ -25,7 +25,7 @@ class Justuno_Jumagext_Block_Adminhtml_System_Config_Form_Button extends Mage_Ad
      *
      * @return string
      */
-    public function getButtonHtml()
+    function getButtonHtml()
     {
         $button = $this->getLayout()->createBlock('adminhtml/widget_button')
             ->setData( array(

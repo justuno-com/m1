@@ -11,7 +11,7 @@ class Justuno_Jumagext_RestController extends Mage_Core_Controller_Front_Action
     protected $isAdminUser;
     protected $adminAuthorizationUrl;
 
-    public function _construct()
+    function _construct()
     {
         //$siteBaseURL = "http://10.91.0.122/mage1";
         //$siteBaseURL = Mage::getBaseUrl();
@@ -25,7 +25,7 @@ class Justuno_Jumagext_RestController extends Mage_Core_Controller_Front_Action
         $this->adminAuthorizationUrl = ($this->isAdminUser) ? $this->siteBaseURL."admin/oauth_authorize" : $this->siteBaseURL."oauth/authorize";
     }
 
-    public function indexAction() {
+    function indexAction() {
  
         $params = array(
             'siteUrl' => $this->siteBaseURL.'oauth',
@@ -164,7 +164,7 @@ class Justuno_Jumagext_RestController extends Mage_Core_Controller_Front_Action
         echo "End of index function...";
     }
  
-    public function callbackAction() {
+    function callbackAction() {
  
         //oAuth parameters
         $siteBaseURL = Mage::getBaseUrl( Mage_Core_Model_Store::URL_TYPE_WEB, true );
@@ -207,11 +207,11 @@ class Justuno_Jumagext_RestController extends Mage_Core_Controller_Front_Action
         return;
     }
  
-    /*public function callbackrejectAction() {
+    /*function callbackrejectAction() {
         echo "Callback rejected";
     }*/
  
-    /*public function doshitAction()
+    /*function doshitAction()
     {
         $params = array(
             'siteUrl' => 'http://www.appfactory.loc/magento/oauth',
@@ -244,7 +244,7 @@ class Justuno_Jumagext_RestController extends Mage_Core_Controller_Front_Action
         return $response->getBody();
     }*/
 
-    /*public function testAction()
+    /*function testAction()
     {
         $restClient->setHeaders('Content-type', 'application/json');
         $restClient->setMethod(Zend_Http_Client::POST);
@@ -263,7 +263,7 @@ class Justuno_Jumagext_RestController extends Mage_Core_Controller_Front_Action
         $response = $restClient->request();
     }*/
 
-    public function loginAction()   /*  PERHAPS WORKS ONLY IN MAGENTO-2 */
+    function loginAction()   /*  PERHAPS WORKS ONLY IN MAGENTO-2 */
     {
         $username = "avnish1@gmail.com";
         $password = "India1947";
@@ -288,7 +288,7 @@ class Justuno_Jumagext_RestController extends Mage_Core_Controller_Front_Action
         echo '<pre>';print_r($result);
     }
 
-    public function loginnAction()
+    function loginnAction()
     {
         $callbackUrl = $siteBaseURL."oauth_admin.php";
         $temporaryCredentialsRequestUrl = $siteBaseURL."oauth/initiate?oauth_callback=" . urlencode($callbackUrl);

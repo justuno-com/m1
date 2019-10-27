@@ -1,7 +1,7 @@
 <?php
 class Justuno_Jumagext_Model_Config_Mylist{
 
-    public function toOptionArray()
+    function toOptionArray()
     {   
        
         $attributes = array();

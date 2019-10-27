@@ -24,19 +24,19 @@ class Justuno_Jumagext_Model_Oauth_Client extends Mage_Core_Model_Abstract
     const OAUTH_STATE_ACCESS_TOKEN = 2;
     const OAUTH_STATE_ERROR = 3;
  
-    public function init($config)
+    function init($config)
     {
         $this->setOAuthConfig($config);
         return $this;
     }
  
-    public function setAuthorizedToken($token)
+    function setAuthorizedToken($token)
     {
         // echo $token; die(' test');
         $this->_authorized_token = $token;
     }
  
-    public function getAuthorizedToken()
+    function getAuthorizedToken()
     {
         if ($this->_authorized_token) {
             return $this->_authorized_token;
@@ -44,12 +44,12 @@ class Justuno_Jumagext_Model_Oauth_Client extends Mage_Core_Model_Abstract
         return false;
     }
  
-    public function reset()
+    function reset()
     {
         return $this->resetSessionParams();
     }
  
-    public function authenticate()
+    function authenticate()
     {
         $state = $this->getOAuthState();
         $consumer = $this->_getOAuthConsumer();
@@ -96,7 +96,7 @@ class Justuno_Jumagext_Model_Oauth_Client extends Mage_Core_Model_Abstract
         return $this;
     }
  
-    public function getRequestToken()
+    function getRequestToken()
     {
         $token = $this->_getRequestTokenFromSession();
         if ($token && $token instanceof Zend_Oauth_Token_Request) {
@@ -112,7 +112,7 @@ class Justuno_Jumagext_Model_Oauth_Client extends Mage_Core_Model_Abstract
         return false;
     }
  
-    public function getAccessToken($requestToken)
+    function getAccessToken($requestToken)
     {
         $token = $this->_getAccessTokenFromSession();
         if ($token && $token instanceof Zend_Oauth_Token_Access) {
@@ -176,17 +176,17 @@ class Justuno_Jumagext_Model_Oauth_Client extends Mage_Core_Model_Abstract
         return false;
     }
  
-    public function getSession()
+    function getSession()
     {
         return Mage::getSingleton('core/session');
     }
  
-    public function getOAuthToken()
+    function getOAuthToken()
     {
         return $this->getRequest()->getParam('oauth_token', false);
     }
  
-    public function getRequest()
+    function getRequest()
     {
         return Mage::app()->getRequest();
     }
@@ -234,7 +234,7 @@ class Justuno_Jumagext_Model_Oauth_Client extends Mage_Core_Model_Abstract
         }
     }
  
-    public function getConfigFromSession()
+    function getConfigFromSession()
     {
         $config = unserialize($this->getSession()->getOAuthConfig());
         // echo "<pre> config value "; print_r($config); die(' here');
@@ -249,7 +249,7 @@ class Justuno_Jumagext_Model_Oauth_Client extends Mage_Core_Model_Abstract
         $this->getSession()->setOAuthState($state);
     }
  
-    public function getOAuthState()
+    function getOAuthState()
     {
         $state = $this->getSession()->getOAuthState();
         if ($state == null) {

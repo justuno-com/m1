@@ -1,16 +1,16 @@
 <?php
 class Justuno_Jumagext_IndexController extends Mage_Core_Controller_Front_Action{
-    public function getcartAction(){
+    function getcartAction(){
         $result = Mage::getModel("checkout/cart")->getItems();
         $this->getResponse()->setHeader('Content-type','application/json',true);
         $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
     }
 
-    public function getordersAction(){
+    function getordersAction(){
         die('Here');
     }
 
-    public function indexAction () {
+    function indexAction () {
         ini_set("display_errors", 1);
         $base_url       = Mage::getBaseUrl(); /*Mage_Core_Model_Store::URL_TYPE_WEB*/
         $apiResources   = "products?page=1&limit=5";
