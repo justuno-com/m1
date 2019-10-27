@@ -25,12 +25,12 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 		if(!empty($query_params['sortProducts'])) {
 			$products->getSelect()->order($query_params['sortProducts'].' DESC');
 		}
-		$page = !empty($query_params['currentPage']) ? $query_params['currentPage'] : 1;
+		$page = !empty($query_params['currentPage']) ? $query_params['currentPage'] : 0;
 		$limit = !empty($query_params['pageSize']) ? $query_params['pageSize'] : 10;
 		$products->getSelect()->limit($limit, $page);
 		$productsArray = array();
 		$brand_attr = Mage::getStoreConfig('justuno/justuno_settings/brand_attributure', $this->storeId);
-		foreach($products as $product) {
+		foreach ($products as $product) {
 			/*      CATEGORIES     */
 			$cats = $product->getCategoryIds();
 			//print_r($cats);
