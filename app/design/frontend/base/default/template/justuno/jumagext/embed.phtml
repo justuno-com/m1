@@ -1,0 +1,90 @@
+<?php
+/**
+ * Justuno plugin for Magento
+ *
+ * @category    design
+ * @package     base_default
+ * @author      Justuno (http://www.justuno.com/)
+ * @copyright   Copyright (c) 2013 Justuno (http://www.justuno.com/)
+ * @license     Open Software License
+ */
+$subject = Mage::getStoreConfig('justuno/justuno_settings/accid', Mage::app()->getStore());
+$juajaxurl = Mage::getStoreConfig('justuno/justuno_settings/juajaxurl', Mage::app()->getStore());
+$pattern = "/^[{]?[0-9a-fA-F]{8}[-]?([0-9a-fA-F]{4}[-]?){3}[0-9a-fA-F]{12}[}]?$/";
+?>
+<?php if(preg_match($pattern, $subject)): ?>
+<script>
+	window.ju_num='<?php echo $subject ?>';
+    window.ju_ajaxCartURL = '<?php echo $this->getUrl("jumagext/index/getcart")?>';
+    if (location.href.includes('checkout') && location.href.includes('success'))
+    {
+       <?php
+            $orderID = Mage::getSingleton('checkout/session')->getLastOrderId();
+            $order = Mage::getModel('sales/order')->load($orderID);
+        ?>
+        window.ju_order_id = '<?php echo $orderID ?>';
+        window.ju_order_obj = {
+            total: '<?php echo $order->getGrandTotal() ?>',
+            subtotal: '<?php echo $order->getSubtotal() ?>',
+            tax: '<?php echo $order->getTaxAmount() ?>',
+            shipping: '<?php echo $order->getShippingAmount() ?>',
+            currency:'<?php echo Mage::app()->getStore()->getCurrentCurrencyCode() ?>'
+        };
+    } else {
+      window.ju_cart_obj = {
+            total: '<?php echo Mage::helper('checkout/cart')->getQuote()->getGrandTotal() ?>',
+            subtotal: '<?php echo Mage::helper('checkout/cart')->getQuote()->getSubtotal() ?>',
+            tax: '<?php echo Mage::helper('checkout/cart')->getQuote()->getTaxAmount() ?>',
+            shipping: '<?php echo Mage::helper('checkout/cart')->getQuote()->getShippingAmount() ?>',
+            currency: '<?php echo Mage::app()->getStore()->getCurrentCurrencyCode() ?>'
+        };
+    }
+</script>
+<script>
+window.asset_host = '//cdn.justuno.com/';
+(function (i, s, o, g, r, a, m) {
+	i[r] = i[r] || function () {
+		(i[r].q = i[r].q || []).push(arguments);
+	};
+	a = s.createElement(o);
+	m = s.getElementsByTagName(o)[0];
+	a.async = 1;
+	a.src = g;
+	m.parentNode.insertBefore(a, m);
+	// eslint-disable-next-line no-undef
+})(window, document, 'script', asset_host + 'vck-m1.js', 'juapp');
+</script>
+<?php else: ?>
+<script>
+    console.log('JU_ERROR: Justuno Account ID (ACCID) Was Not Set Correctly...');
+</script>
+<?php endif; ?>
+<?php if($juajaxurl): ?>
+    <script>
+        window.ju_MageAJAX = '<?php echo $juajaxurl ?>';
+    </script>
+<?php endif; ?>
+<?php
+  if(Mage::getSingleton('customer/session')->isLoggedIn()) {
+    $customerData = Mage::getSingleton('customer/session')->getCustomer();
+    $customerID=$customerData->getId();
+    //print_r($customerData);
+    //echo $customerID;
+  }
+  $pageIdentifier = Mage::app()->getFrontController()->getAction()->getFullActionName();
+?>
+<?php if(Mage::registry('current_product')): ?>
+  <?php
+    $product = Mage::registry('current_product');
+    $productid = $product->getId();
+    $productstockqty = $product->getStockItem()->getQty();
+  ?>
+<?php endif; ?>
+<script>
+  window.ju_MageKeys = {
+    PageID: '<?php echo $pageIdentifier ?>',
+    ProductID: '<?php echo $productid ?>',
+    CustomerID: '<?php echo $customerID ?>',
+    StockQty: '<?php echo $productstockqty ?>'
+  };
+</script>

@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Justuno_Jumagext>
+            <version>0.2.0</version>
+        </Justuno_Jumagext>
+    </modules>
+    <frontend>
+        <layout>
+            <updates>
+                <jumagext>
+                    <file>justuno/jumagext.xml</file>
+                </jumagext>
+            </updates>
+        </layout>
+        <routers>
+            <jumagext>
+                <use>standard</use>
+                <args>
+                    <module>Justuno_Jumagext</module>
+                    <frontName>jumagext</frontName>
+                </args>
+            </jumagext>
+        </routers>
+    </frontend>
+    <global>
+        <blocks>
+            <justuno_jumagext><class>Justuno_Jumagext_Block</class></justuno_jumagext>
+        </blocks>
+        <models>
+           <justuno_jumagext>
+                <class>Justuno_Jumagext_Model</class>
+           </justuno_jumagext>
+        </models>
+
+        <helpers>
+            <justuno_jumagext>
+                <class>Justuno_Jumagext_Helper</class>
+            </justuno_jumagext>
+        </helpers>
+    </global>
+</config>

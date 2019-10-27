@@ -1,0 +1,16 @@
+# 2019-10-27 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+# http://stackoverflow.com/questions/987142
+# http://stackoverflow.com/questions/9162919
+# http://stackoverflow.com/questions/8024924#comment15884195_8025106
+*
+!*/
+!/.gitignore
+!/composer.json
+!/justuno_installation_guide_m1.txt
+!/LICENSE.md
+!/README.md
+!app/code/community/Justuno/**/*
+!app/design/adminhtml/default/default/template/justuno/**/*
+!app/design/frontend/base/default/layout/justuno/**/*
+!app/design/frontend/base/default/template/justuno/**/*
+!app/etc/modules/Justuno_Jumagext.xml
