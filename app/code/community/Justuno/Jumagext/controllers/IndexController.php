@@ -1,5 +1,5 @@
 <?php
-class Justuno_Jumagext_IndexController extends Mage_Core_Controller_Front_Action{
+final class Justuno_Jumagext_IndexController extends Mage_Core_Controller_Front_Action{
     function getcartAction(){
         $result = Mage::getModel("checkout/cart")->getItems();
         $this->getResponse()->setHeader('Content-type','application/json',true);

@@ -1,7 +1,5 @@
 <?php
- 
-class Justuno_Jumagext_RestController extends Mage_Core_Controller_Front_Action
-{
+final class Justuno_Jumagext_RestController extends Mage_Core_Controller_Front_Action {
     protected $siteBaseURL;
 
     protected $moduleName;
