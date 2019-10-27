@@ -1,20 +1,5 @@
 <?php
 final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Front_Action {
-	function _construct() {
-		$this->storeId = Mage::app()->getStore()->getStoreId();
-		$this->siteBaseURL = Mage::getBaseUrl( Mage_Core_Model_Store::URL_TYPE_WEB, true );
-		$this->moduleName = Mage::app()->getRequest()->getModuleName();
-		$this->routerName = Mage::app()->getRequest()->getRouteName();
-		$this->controllerName = Mage::app()->getRequest()->getControllerName();
-		$this->isAdminUser = false;
-		$this->adminAuthorizationUrl = ($this->isAdminUser) ? $this->siteBaseURL."admin/oauth_authorize" : $this->siteBaseURL."oauth/authorize";
-	}
-
-	function getBrandAttribute() {
-		$attribute = Mage::getStoreConfig('justuno/justuno_settings/brand_attributure', $this->storeId);
-		return $attribute;
-	}
-
 	function catalogAction() {
 		$this->authorizeUser();
 		$query_params = Mage::app()->getRequest()->getParams();
@@ -38,7 +23,7 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 		$limit = !empty($query_params['pageSize']) ? $query_params['pageSize'] : 10;
 		$products->getSelect()->limit($limit, $page);
 		$productsArray = array();
-		$brand_attr = $this->getBrandAttribute();
+		$brand_attr = Mage::getStoreConfig('justuno/justuno_settings/brand_attributure', $this->storeId);
 		foreach($products as $product) {
 			/*      CATEGORIES     */
 			$cats = $product->getCategoryIds();
@@ -223,13 +208,21 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 		return $customerArray;
 	}
 
-	protected $storeId;
-	protected $siteBaseURL;
-	protected $moduleName;
-	protected $routerName;
-	protected $controllerName;
-	protected $isAdminUser;
-	protected $adminAuthorizationUrl;
+	/**
+	 * 2019-10-27
+	 * @override
+	 * @see Mage_Core_Controller_Varien_Action::_construct()
+	 * @used-by Mage_Core_Controller_Varien_Action::__construct()
+	 */
+	protected function _construct() {
+		$this->storeId = Mage::app()->getStore()->getStoreId();
+		$this->siteBaseURL = Mage::getBaseUrl( Mage_Core_Model_Store::URL_TYPE_WEB, true );
+		$this->moduleName = Mage::app()->getRequest()->getModuleName();
+		$this->routerName = Mage::app()->getRequest()->getRouteName();
+		$this->controllerName = Mage::app()->getRequest()->getControllerName();
+		$this->isAdminUser = false;
+		$this->adminAuthorizationUrl = ($this->isAdminUser) ? $this->siteBaseURL."admin/oauth_authorize" : $this->siteBaseURL."oauth/authorize";
+	}
 
 	/**
 	 * 2019-10-27
@@ -249,4 +242,12 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 			}
 		}
 	}
+
+	private $storeId;
+	private $siteBaseURL;
+	private $moduleName;
+	private $routerName;
+	private $controllerName;
+	private $isAdminUser;
+	private $adminAuthorizationUrl;
 }
