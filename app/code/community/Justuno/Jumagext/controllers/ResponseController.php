@@ -8,18 +8,19 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 	function catalogAction() {
 		$this->authorizeUser();
 		$query_params = Mage::app()->getRequest()->getParams();
+		/** @var Mage_Catalog_Model_Resource_Product_Collection $products */
 		$products = Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect('*');
-		if(!empty($query_params['updatedSince'])) {
-		  $fromDate = date('Y-m-d H:i:s', strtotime($query_params['updatedSince']));
-		  $toDate = date('Y-m-d H:i:s', strtotime('2035-01-01 23:59:59'));
-		  $timezone = $timezone =  Mage::getStoreConfig('general/locale/timezone');
-		  $fromDate = new DateTime($fromDate, new DateTimeZone($timezone));
-		  $fromDate = $fromDate->format('U');
-		  $fromDate = date("Y-m-d H:i:s",$fromDate);
-		  $toDate = new DateTime($toDate, new DateTimeZone($timezone));
-		  $toDate = $toDate->format('U');
-		  $toDate = date("Y-m-d H:i:s",$toDate);
-		  $products->addFieldToFilter('updated_at', array('from' => $fromDate, 'to' => $toDate));
+		if (!empty($query_params['updatedSince'])) {
+			$fromDate = date('Y-m-d H:i:s', strtotime($query_params['updatedSince']));
+			$toDate = date('Y-m-d H:i:s', strtotime('2035-01-01 23:59:59'));
+			$timezone = $timezone =  Mage::getStoreConfig('general/locale/timezone');
+			$fromDate = new DateTime($fromDate, new DateTimeZone($timezone));
+			$fromDate = $fromDate->format('U');
+			$fromDate = date("Y-m-d H:i:s",$fromDate);
+			$toDate = new DateTime($toDate, new DateTimeZone($timezone));
+			$toDate = $toDate->format('U');
+			$toDate = date("Y-m-d H:i:s",$toDate);
+			$products->addFieldToFilter('updated_at', array('from' => $fromDate, 'to' => $toDate));
 		}
 		if(!empty($query_params['sortProducts'])) {
 			$products->getSelect()->order($query_params['sortProducts'].' DESC');
