@@ -1,4 +1,8 @@
 <?php
+use Mage_Catalog_Model_Product as P;
+use Mage_Catalog_Model_Product_Visibility as V;
+use Mage_Tag_Model_Resource_Tag_Collection as TC;
+use Mage_Tag_Model_Tag as T;
 final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Front_Action {
 	/**
 	 * 2019-10-27
@@ -10,6 +14,7 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 		$query_params = Mage::app()->getRequest()->getParams();
 		/** @var Mage_Catalog_Model_Resource_Product_Collection $products */
 		$products = Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect('*');
+		$products->setVisibility([V::VISIBILITY_BOTH, V::VISIBILITY_IN_CATALOG, V::VISIBILITY_IN_SEARCH]);
 		if (!empty($query_params['updatedSince'])) {
 			$fromDate = date('Y-m-d H:i:s', strtotime($query_params['updatedSince']));
 			$toDate = date('Y-m-d H:i:s', strtotime('2035-01-01 23:59:59'));
@@ -30,9 +35,9 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 		$products->getSelect()->limit($limit, $page);
 		$productsArray = array();
 		$brand_attr = Mage::getStoreConfig('justuno/justuno_settings/brand_attributure', $this->storeId);
-		foreach ($products as $product) {
+		foreach ($products as $p) { /** @var P $p */
 			/*      CATEGORIES     */
-			$cats = $product->getCategoryIds();
+			$cats = $p->getCategoryIds();
 			//print_r($cats);
 			$categoryData = array();
 			foreach ($cats as $category_id) {
@@ -47,27 +52,56 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 			}
 			$cat_img_url = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'catalog/product';
 			$prod_temp = array(
-				'ID'        => $product["sku"],
-				'MSRP'      => $product["msrp"],
-				'Price'     => $product["price"],
-				'SalePrice' => $product["price"],
-				'Title'     => $product["name"],
-				'ImageURL'  => $cat_img_url.$product->getImage(),
-				'URL'         => $this->siteBaseURL.$product["url_path"],
-				'CreatedAt'   => $product["created_at"],
-				'UpdatedAt'   => $product["updated_at"],
+				'ID'        => $p["sku"],
+				'MSRP'      => $p["msrp"],
+				'Price'     => $p["price"],
+				'SalePrice' => $p["price"],
+				'Title'     => $p["name"],
+				'ImageURL'  => $cat_img_url.$p->getImage(),
+				'URL'         => $this->siteBaseURL.$p["url_path"],
+				'CreatedAt'   => $p["created_at"],
+				'UpdatedAt'   => $p["updated_at"],
 				'ReviewsCount' => '',
 				'ReviewsRatingSum' => '',
 				'Categories'  => $categoryData,
+				'Tags' => $this->tags($p)
 			);
+			if ('configurable' === $p->getTypeId()) {
+				$ct = $p->getTypeInstance(); /** @var Mage_Catalog_Model_Product_Type_Configurable $ct */
+				$cta = [];
+				$opts = array_column($ct->getConfigurableAttributesAsArray($p), 'attribute_code', 'id');
+				foreach ($opts as $id => $code) {
+					$cta["OptionType$id"] = $code;
+				}
+				$cta['Variants'] = array_values(array_map(function(P $p) use($opts) {
+					$p = $p->load($p->getId()); // 2019-08-28 Otherwise $p does not contain the product's price
+					/** @var Mage_CatalogInventory_Model_Stock_Item $stock */
+					$stock = Mage::getModel('cataloginventory/stock_item');
+					$stock->loadByProduct($p);
+					$r = [
+						'ID' => $p->getId()
+						,'Title' => $p->getName()
+						,'SKU' => $p->getSku()
+						,'MSRP' => $p['msrp']
+						,'SalePrice' => $p->getPrice()
+						,'InventoryQuantity' => (int)$stock->getQty()
+					];
+					foreach ($opts as $id => $code) {
+						$r["Option$id"] = $p->getAttributeText($code);
+					}
+					return $r;
+				}, $ct->getUsedProducts(null, $p)));
+				$prod_temp += $cta;
+			}
 			if(!empty($brand_attr)) {
-				$brand_attr_val = !empty($product[$brand_attr]) ? $product[$brand_attr] : "";
+				$brand_attr_val = !empty($p[$brand_attr]) ? $p[$brand_attr] : "";
 				$prod_temp["BrandId"] = $brand_attr;
 				$prod_temp["BrandName"] = $brand_attr_val;
 			}
 			$productsArray[] = $prod_temp;
 		}
-		echo json_encode($productsArray);
+		$this->getResponse()->clearHeaders()->setHeader('Content-type','application/json', true);
+		$this->getResponse()->setBody(json_encode($productsArray, JSON_PRETTY_PRINT));
 	}
 
 	/** 2019-10-27 */
@@ -261,6 +295,24 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 			'CountryCode' => $def_bill_address["country_id"]
 		);
 		return $customerArray;
+	}
+
+	/**
+	 * 2019-10-27
+	 * @used-by catalogAction()
+	 * @param P $p
+	 * @return array(array(string => int|string))
+	 */
+	private function tags(P $p) {
+		$tc = new TC; /** @var TC $tc */
+		$tc->addPopularity();
+		$tc->addStatusFilter(T::STATUS_APPROVED);
+		$tc->addProductFilter($p->getId());
+		$tc->setFlag('relation', true);
+		$tc->setActiveFilter();
+		return array_values(array_map(function(T $t) {return [
+			'ID' => $t->getId(), 'Name' => $t->getName()
+		];}, $tc->getItems()));
 	}
 
 	private $storeId;
