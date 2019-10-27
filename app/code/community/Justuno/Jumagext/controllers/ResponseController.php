@@ -69,6 +69,7 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 		echo json_encode($productsArray);
 	}
 
+	/** 2019-10-27 */
 	function catalogFirstAction() {
 		$this->authorizeUser();
 		$params = array(
@@ -98,24 +99,7 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 		print_r($resp);
 	}
 
-	function build_http_query( $query ){
-		$query_array = array();
-		foreach ($query as $key => $key_value) {
-			if ($key_value == ''){continue;}
-			if( $key == 'sortOrders' ) {
-				$query_array[]  = "order=".urlencode( $key_value )."&dir=asc";
-			}
-			else if($key == "currentPage"){
-				$page =  urlencode( $key_value );
-				$query_array[] = "page=".$page;
-			} else if($key == "pageSize"){
-				$limit =  urlencode( $key_value );
-				$query_array[] = "limit=".$limit;
-			}
-		}
-		return implode( '&', $query_array );
-	}
-
+	/** 2019-10-27 */
 	function ordersAction() {
 		$this->authorizeUser();
 		$query_params = Mage::app()->getRequest()->getParams();
@@ -181,38 +165,6 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 		print_r(json_encode($ordersArray));
 	}
 
-	function getCustomerData($customerId) {
-		$customerObj = Mage::getModel('customer/customer')->load($customerId);
-		$customer = $customerObj->getData();
-		$def_bill_address = $customerObj->getDefaultBillingAddress()->getData();
-
-		$orders = Mage::getModel('sales/order')->getCollection()->addFieldToFilter('customer_id',$customerId);
-		$OrdersCount = $orders->count();
-		$totalSpent = 0;
-		foreach ($orders as $order) {
-			$total = $order->getGrandTotal();
-			$totalSpent+= $total;
-		}
-		$customerArray = array(
-			'id'        => $customer["entity_id"],
-			'email'     => $customer["email"],
-			'CreatedAt' => $customer["created_at"],
-			'UpdatedAt' => $customer["updated_at"],
-			'FirstName' => $customer["firstname"],
-			'LastName'  => $customer["lastname"],
-			'OrdersCount' => $OrdersCount,
-			'TotalSpend'  => $totalSpent,
-			'Tags'        => '',
-			'address1'    => $def_bill_address["street"],
-			'address2'    => '',
-			'City'        => $def_bill_address["city"],
-			'Zip'         => $def_bill_address["postcode"],
-			'ProvinceCode'=> '',
-			'CountryCode' => $def_bill_address["country_id"]
-		);
-		return $customerArray;
-	}
-
 	/**
 	 * 2019-10-27
 	 * @override
@@ -246,6 +198,68 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 				die('Token mismatched!');
 			}
 		}
+	}
+
+	/**
+	 * 2019-10-27
+	 * @used-by catalogFirstAction()
+	 * @param $query
+	 * @return string
+	 */
+	private function build_http_query( $query ){
+		$query_array = array();
+		foreach ($query as $key => $key_value) {
+			if ($key_value == ''){continue;}
+			if( $key == 'sortOrders' ) {
+				$query_array[]  = "order=".urlencode( $key_value )."&dir=asc";
+			}
+			else if($key == "currentPage"){
+				$page =  urlencode( $key_value );
+				$query_array[] = "page=".$page;
+			} else if($key == "pageSize"){
+				$limit =  urlencode( $key_value );
+				$query_array[] = "limit=".$limit;
+			}
+		}
+		return implode( '&', $query_array );
+	}
+
+	/**
+	 * 2019-10-27
+	 * @used-by ordersAction()
+	 * @param $customerId
+	 * @return array
+	 */
+	private function getCustomerData($customerId) {
+		$customerObj = Mage::getModel('customer/customer')->load($customerId);
+		$customer = $customerObj->getData();
+		$def_bill_address = $customerObj->getDefaultBillingAddress()->getData();
+
+		$orders = Mage::getModel('sales/order')->getCollection()->addFieldToFilter('customer_id',$customerId);
+		$OrdersCount = $orders->count();
+		$totalSpent = 0;
+		foreach ($orders as $order) {
+			$total = $order->getGrandTotal();
+			$totalSpent+= $total;
+		}
+		$customerArray = array(
+			'id'        => $customer["entity_id"],
+			'email'     => $customer["email"],
+			'CreatedAt' => $customer["created_at"],
+			'UpdatedAt' => $customer["updated_at"],
+			'FirstName' => $customer["firstname"],
+			'LastName'  => $customer["lastname"],
+			'OrdersCount' => $OrdersCount,
+			'TotalSpend'  => $totalSpent,
+			'Tags'        => '',
+			'address1'    => $def_bill_address["street"],
+			'address2'    => '',
+			'City'        => $def_bill_address["city"],
+			'Zip'         => $def_bill_address["postcode"],
+			'ProvinceCode'=> '',
+			'CountryCode' => $def_bill_address["country_id"]
+		);
+		return $customerArray;
 	}
 
 	private $storeId;
