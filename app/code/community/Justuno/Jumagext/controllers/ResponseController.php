@@ -89,7 +89,8 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 				,'Tags' => $this->tags($p)
 				,'Title' => $p['name']
 				,'UpdatedAt' => $p['updated_at']
-				,'URL' => $this->siteBaseURL.$p['url_path']
+				// 2019-10-30 https://github.com/justuno-com/m1/issues/16
+				,'URL' => $this->siteBaseURL . ($p['url_path'] ?: $p['url_key'])
 				/**
 				 * 2019-10-30
 				 * «if a product doesn't have parent/child like structure,
