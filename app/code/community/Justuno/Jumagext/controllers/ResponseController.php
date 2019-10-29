@@ -1,6 +1,7 @@
 <?php
 use Mage_Catalog_Model_Product as P;
 use Mage_Catalog_Model_Product_Visibility as V;
+use Mage_Review_Model_Review_Summary as RS;
 use Mage_Tag_Model_Resource_Tag_Collection as TC;
 use Mage_Tag_Model_Tag as T;
 final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Front_Action {
@@ -49,6 +50,14 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 				$categoryData[] = $cat_tmp;
 			}
 			$cat_img_url = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'catalog/product';
+			/**
+			 * 2019-10-30
+			 * "Add the `ReviewsCount` and `ReviewsRatingSum` values to the `catalog` response":
+			 * https://github.com/justuno-com/m1/issues/15
+			 */
+			$p->getRatingSummary();
+			$rs = new RS; /** @var RS $rs */
+			$rs->load($p->getId());
 			$prod_temp = array(
 				'Categories' => $categoryData
 				,'CreatedAt' => $p['created_at']
@@ -56,8 +65,8 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 				,'ImageURL' => $cat_img_url.$p->getImage()
 				,'MSRP' => $p['msrp']
 				,'Price' => $p['price']
-				,'ReviewsCount' => ''
-				,'ReviewsRatingSum' => ''
+				,'ReviewsCount' => $rs->getReviewsCount()
+				,'ReviewsRatingSum' => $rs->getRatingSummary()
 				,'SalePrice' => $p['price']
 				,'Tags' => $this->tags($p)
 				,'Title' => $p['name']
