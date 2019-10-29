@@ -1,4 +1,5 @@
 <?php
+use Justuno_Jumagext_Catalog as pCatalog;
 use Mage_Catalog_Model_Product as P;
 use Mage_Catalog_Model_Product_Visibility as V;
 use Mage_Tag_Model_Resource_Tag_Collection as TC;
@@ -52,46 +53,33 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 			}
 			$cat_img_url = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'catalog/product';
 			$prod_temp = array(
-				'ID'        => $p["sku"],
-				'MSRP'      => $p["msrp"],
-				'Price'     => $p["price"],
-				'SalePrice' => $p["price"],
-				'Title'     => $p["name"],
-				'ImageURL'  => $cat_img_url.$p->getImage(),
-				'URL'         => $this->siteBaseURL.$p["url_path"],
-				'CreatedAt'   => $p["created_at"],
-				'UpdatedAt'   => $p["updated_at"],
-				'ReviewsCount' => '',
-				'ReviewsRatingSum' => '',
-				'Categories'  => $categoryData,
-				'Tags' => $this->tags($p)
+				'Categories' => $categoryData
+				,'CreatedAt' => $p['created_at']
+				,'ID' => $p['sku']
+				,'ImageURL' => $cat_img_url.$p->getImage()
+				,'MSRP' => $p['msrp']
+				,'Price' => $p['price']
+				,'ReviewsCount' => ''
+				,'ReviewsRatingSum' => ''
+				,'SalePrice' => $p['price']
+				,'Tags' => $this->tags($p)
+				,'Title' => $p['name']
+				,'UpdatedAt' => $p['updated_at']
+				,'URL' => $this->siteBaseURL.$p['url_path']
+				/**
+				 * 2019-10-30
+				 * «if a product doesn't have parent/child like structure,
+				 * I still need at least one variant in the Variants array»:
+				 * https://github.com/justuno-com/m1/issues/5 
+				 */
+				,'Variants' => Justuno_Jumagext_Catalog_Variants::p($p)
 			);
 			if ('configurable' === $p->getTypeId()) {
 				$ct = $p->getTypeInstance(); /** @var Mage_Catalog_Model_Product_Type_Configurable $ct */
-				$cta = [];
 				$opts = array_column($ct->getConfigurableAttributesAsArray($p), 'attribute_code', 'id');
 				foreach ($opts as $id => $code) {
-					$cta["OptionType$id"] = $code;
+					$prod_temp["OptionType$id"] = $code;
 				}
-				$cta['Variants'] = array_values(array_map(function(P $p) use($opts) {
-					$p = $p->load($p->getId()); // 2019-08-28 Otherwise $p does not contain the product's price
-					/** @var Mage_CatalogInventory_Model_Stock_Item $stock */
-					$stock = Mage::getModel('cataloginventory/stock_item');
-					$stock->loadByProduct($p);
-					$r = [
-						'ID' => $p->getId()
-						,'Title' => $p->getName()
-						,'SKU' => $p->getSku()
-						,'MSRP' => $p['msrp']
-						,'SalePrice' => $p->getPrice()
-						,'InventoryQuantity' => (int)$stock->getQty()
-					];
-					foreach ($opts as $id => $code) {
-						$r["Option$id"] = $p->getAttributeText($code);
-					}
-					return $r;
-				}, $ct->getUsedProducts(null, $p)));
-				$prod_temp += $cta;
 			}
 			if(!empty($brand_attr)) {
 				$brand_attr_val = !empty($p[$brand_attr]) ? $p[$brand_attr] : "";
