@@ -66,15 +66,22 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 				,'CreatedAt' => $p['created_at']
 				,'ID' => $p['sku']
 				,'ImageURL' => $cat_img_url.$p->getImage()
-				,'MSRP' => $p['msrp']
-				,'Price' => $p['price']
 				// 2019-10-30
-				// «ReviewsCount and ReviewSums need to be Ints»: https://github.com/justuno-com/m1/issues/11
+				// «MSRP, Price, SalePrice, Variants.MSRP, and Variants.SalePrice all need to be Floats,
+				// or if that is not possible then Ints»: https://github.com/justuno-com/m1/issues/10
+				,'MSRP' => (float)$p['msrp']
+				// 2019-10-30
+				// «MSRP, Price, SalePrice, Variants.MSRP, and Variants.SalePrice all need to be Floats,
+				// or if that is not possible then Ints»: https://github.com/justuno-com/m1/issues/10
+				,'Price' => (float)$p['price']
+				// 2019-10-30 «ReviewsCount and ReviewSums need to be Ints»: https://github.com/justuno-com/m1/issues/11
 				,'ReviewsCount' => (int)$rs->getReviewsCount()
-				// 2019-10-30
-				// «ReviewsCount and ReviewSums need to be Ints»: https://github.com/justuno-com/m1/issues/11
+				// 2019-10-30 «ReviewsCount and ReviewSums need to be Ints»: https://github.com/justuno-com/m1/issues/11
 				,'ReviewsRatingSum' => (int)$rs->getRatingSummary()
-				,'SalePrice' => $p['price']
+				// 2019-10-30
+				// «MSRP, Price, SalePrice, Variants.MSRP, and Variants.SalePrice all need to be Floats,
+				// or if that is not possible then Ints»: https://github.com/justuno-com/m1/issues/10
+				,'SalePrice' => (float)$p['price']
 				,'Tags' => $this->tags($p)
 				,'Title' => $p['name']
 				,'UpdatedAt' => $p['updated_at']

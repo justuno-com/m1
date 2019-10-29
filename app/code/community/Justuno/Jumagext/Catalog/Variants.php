@@ -37,8 +37,14 @@ final class Justuno_Jumagext_Catalog_Variants {
 		$r = [
 			'ID' => $p->getId()
 			,'InventoryQuantity' => (int)$si->getQty()
-			,'MSRP' => $p['msrp']
-			,'SalePrice' => $p->getPrice()
+			// 2019-10-30
+			// «MSRP, Price, SalePrice, Variants.MSRP, and Variants.SalePrice all need to be Floats,
+			// or if that is not possible then Ints»: https://github.com/justuno-com/m1/issues/10
+			,'MSRP' => (float)$p['msrp']
+			// 2019-10-30
+			// «MSRP, Price, SalePrice, Variants.MSRP, and Variants.SalePrice all need to be Floats,
+			// or if that is not possible then Ints»: https://github.com/justuno-com/m1/issues/10
+			,'SalePrice' => (float)$p->getPrice()
 			,'SKU' => $p->getSku()
 			,'Title' => $p->getName()
 		];
