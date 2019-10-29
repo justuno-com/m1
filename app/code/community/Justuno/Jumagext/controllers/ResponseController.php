@@ -43,18 +43,21 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 				$_cat = Mage::getModel('catalog/category')->load($category_id);
 				$cat_tmp['Description'] = $_cat->getDescription();
 				$cat_tmp['ID'] = $_cat->getId();
-				$cat_tmp['ImageURL'] = $_cat->getImageUrl();
+				// 2019-10-30
+				// «In Categories imageURL is being sent back as a boolean in some cases,
+				// it should always be sent back as a string,
+				// if there is not url just don't send the property back»:
+				// https://github.com/justuno-com/m1/issues/12
+				$cat_tmp['ImageURL'] = $_cat->getImageUrl() ?: null;
 				$cat_tmp['Keywords'] = $_cat->getMetaKeywords();
 				$cat_tmp['Name'] = $_cat->getName();
 				$cat_tmp['URL'] = $_cat->getUrl();
 				$categoryData[] = $cat_tmp;
 			}
 			$cat_img_url = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'catalog/product';
-			/**
-			 * 2019-10-30
-			 * "Add the `ReviewsCount` and `ReviewsRatingSum` values to the `catalog` response":
-			 * https://github.com/justuno-com/m1/issues/15
-			 */
+			// 2019-10-30
+			// "Add the `ReviewsCount` and `ReviewsRatingSum` values to the `catalog` response":
+			// https://github.com/justuno-com/m1/issues/15
 			$p->getRatingSummary();
 			$rs = new RS; /** @var RS $rs */
 			$rs->load($p->getId());
