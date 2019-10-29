@@ -66,10 +66,14 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 				,'CreatedAt' => $p['created_at']
 				,'ID' => $p['sku']
 				,'ImageURL' => $cat_img_url.$p->getImage()
-				// 2019-10-30
-				// «MSRP, Price, SalePrice, Variants.MSRP, and Variants.SalePrice all need to be Floats,
-				// or if that is not possible then Ints»: https://github.com/justuno-com/m1/issues/10
-				,'MSRP' => (float)$p['msrp']
+				/**
+				 * 2019-10-30
+				 * 1) «MSRP, Price, SalePrice, Variants.MSRP, and Variants.SalePrice all need to be Floats,
+				 * or if that is not possible then Ints»: https://github.com/justuno-com/m1/issues/10
+				 * 2) «If their isn't an MSRP for some reason just use the salesprice»:
+				 * https://github.com/justuno-com/m1/issues/6
+				 */
+				,'MSRP' => (float)($p['msrp'] ?: $p->getPrice())
 				// 2019-10-30
 				// «MSRP, Price, SalePrice, Variants.MSRP, and Variants.SalePrice all need to be Floats,
 				// or if that is not possible then Ints»: https://github.com/justuno-com/m1/issues/10
@@ -81,7 +85,7 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 				// 2019-10-30
 				// «MSRP, Price, SalePrice, Variants.MSRP, and Variants.SalePrice all need to be Floats,
 				// or if that is not possible then Ints»: https://github.com/justuno-com/m1/issues/10
-				,'SalePrice' => (float)$p['price']
+				,'SalePrice' => (float)$p->getPrice()
 				,'Tags' => $this->tags($p)
 				,'Title' => $p['name']
 				,'UpdatedAt' => $p['updated_at']
