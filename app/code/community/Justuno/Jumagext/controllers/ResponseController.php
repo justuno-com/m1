@@ -58,7 +58,7 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 			$p->getRatingSummary();
 			$rs = new RS; /** @var RS $rs */
 			$rs->load($p->getId());
-			$prod_temp = array(
+			$prod_temp = [
 				'Categories' => $categoryData
 				,'CreatedAt' => $p['created_at']
 				,'ID' => $p['sku']
@@ -83,7 +83,7 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 				 * https://github.com/justuno-com/m1/issues/5 
 				 */
 				,'Variants' => Justuno_Jumagext_Catalog_Variants::p($p)
-			);
+			];
 			if ('configurable' === $p->getTypeId()) {
 				$ct = $p->getTypeInstance(); /** @var Mage_Catalog_Model_Product_Type_Configurable $ct */
 				$opts = array_column($ct->getConfigurableAttributesAsArray($p), 'attribute_code', 'id');
@@ -103,7 +103,10 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 				$prod_temp["BrandId"] = $brand_attr;
 				$prod_temp["BrandName"] = $brand_attr_val;
 			}
-			$productsArray[] = $prod_temp;
+			// 2019-10-30
+			// «if a property is null or an empty string do not send it back»:
+			// https://github.com/justuno-com/m1/issues/9
+			$productsArray[] = Justuno_Jumagext_Response::filter($prod_temp);
 		}
 		$this->getResponse()->clearHeaders()->setHeader('Content-type','application/json', true);
 		$this->getResponse()->setBody(json_encode($productsArray, JSON_PRETTY_PRINT));
