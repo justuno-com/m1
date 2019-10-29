@@ -37,18 +37,16 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 		$productsArray = array();
 		$brand_attr = Mage::getStoreConfig('justuno/justuno_settings/brand_attributure', $this->storeId);
 		foreach ($products as $p) { /** @var P $p */
-			/*      CATEGORIES     */
 			$cats = $p->getCategoryIds();
-			//print_r($cats);
 			$categoryData = array();
 			foreach ($cats as $category_id) {
-				$_cat = Mage::getModel('catalog/category')->load($category_id) ;
-				$cat_tmp["ID"] = $_cat->getId();
-				$cat_tmp["Name"] = $_cat->getName();
-				$cat_tmp["Description"] = $_cat->getDescription();
-				$cat_tmp["URL"] = $_cat->getUrl();
-				$cat_tmp["ImageURL"] = $_cat->getImageUrl();
-				$cat_tmp["Keywords"] = $_cat->getMetaKeywords();
+				$_cat = Mage::getModel('catalog/category')->load($category_id);
+				$cat_tmp['Description'] = $_cat->getDescription();
+				$cat_tmp['ID'] = $_cat->getId();
+				$cat_tmp['ImageURL'] = $_cat->getImageUrl();
+				$cat_tmp['Keywords'] = $_cat->getMetaKeywords();
+				$cat_tmp['Name'] = $_cat->getName();
+				$cat_tmp['URL'] = $_cat->getUrl();
 				$categoryData[] = $cat_tmp;
 			}
 			$cat_img_url = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'catalog/product';
