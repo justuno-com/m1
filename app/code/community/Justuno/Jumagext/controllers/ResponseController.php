@@ -48,6 +48,9 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 		$productsArray = array();
 		$brand_attr = Mage::getStoreConfig('justuno/justuno_settings/brand_attributure', $this->storeId);
 		foreach ($products as $p) { /** @var P $p */
+			// 2019-08-28 Otherwise $p does not contain the product's price
+			// 2019-08-30 The collection does not load media gallery.
+			$p = $p->load($p->getId()); /** @var P $p */
 			$cats = $p->getCategoryIds();
 			$categoryData = array();
 			foreach ($cats as $category_id) {
@@ -68,7 +71,6 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 				$cat_tmp['URL'] = $_cat->getUrl();
 				$categoryData[] = $cat_tmp;
 			}
-			$cat_img_url = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'catalog/product';
 			// 2019-10-30
 			// "Add the `ReviewsCount` and `ReviewsRatingSum` values to the `catalog` response":
 			// https://github.com/justuno-com/m1/issues/15
@@ -79,7 +81,6 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 				'Categories' => $categoryData
 				,'CreatedAt' => $p['created_at']
 				,'ID' => $p['sku']
-				,'ImageURL' => $cat_img_url.$p->getImage()
 				/**
 				 * 2019-10-30
 				 * 1) «MSRP, Price, SalePrice, Variants.MSRP, and Variants.SalePrice all need to be Floats,
@@ -112,7 +113,7 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 				 * https://github.com/justuno-com/m1/issues/5 
 				 */
 				,'Variants' => Justuno_Jumagext_Catalog_Variants::p($p)
-			];
+			] + Justuno_Jumagext_Catalog_Images::p($p);
 			if ('configurable' === $p->getTypeId()) {
 				$ct = $p->getTypeInstance(); /** @var Mage_Catalog_Model_Product_Type_Configurable $ct */
 				$opts = array_column($ct->getConfigurableAttributesAsArray($p), 'attribute_code', 'id');

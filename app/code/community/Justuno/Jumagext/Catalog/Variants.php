@@ -32,8 +32,6 @@ final class Justuno_Jumagext_Catalog_Variants {
 	 * @return array(string => mixed)
 	 */
 	private static function variant(P $p, P $parent = null, $opts = []) {
-		// 2019-08-28 Otherwise $p does not contain the product's price
-		$p = $p->load($p->getId()); /** @var P $p */
 		$si = new SI; /** @var SI $si */
 		$si->loadByProduct($p);
 		$r = [
