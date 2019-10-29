@@ -1,5 +1,4 @@
 <?php
-use Justuno_Jumagext_Catalog as pCatalog;
 use Mage_Catalog_Model_Product as P;
 use Mage_Catalog_Model_Product_Visibility as V;
 use Mage_Tag_Model_Resource_Tag_Collection as TC;
