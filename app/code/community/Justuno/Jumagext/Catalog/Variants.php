@@ -1,5 +1,6 @@
 <?php
 use Mage_Catalog_Model_Product as P;
+use Mage_Catalog_Model_Product_Status as Status;
 use Mage_CatalogInventory_Model_Stock_Item as SI;
 // 2019-10-30
 final class Justuno_Jumagext_Catalog_Variants {
@@ -37,7 +38,13 @@ final class Justuno_Jumagext_Catalog_Variants {
 		$si->loadByProduct($p);
 		$r = [
 			'ID' => $p->getId()
-			,'InventoryQuantity' => (int)$si->getQty()
+			/**
+			 * 2019-10-30
+			 * «if a product has a Status of "Disabled" we'd still want it in the feed,
+			 * but we'd want to set the inventoryquantity to -9999»:
+			 * https://github.com/justuno-com/m1/issues/4
+			 */
+			,'InventoryQuantity' => $p->isDisabled() ? -9999 : (int)$si->getQty()
 			/**
 			 * 2019-10-30
 			 * 1) «MSRP, Price, SalePrice, Variants.MSRP, and Variants.SalePrice all need to be Floats,

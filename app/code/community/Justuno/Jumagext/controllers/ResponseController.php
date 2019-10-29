@@ -15,7 +15,18 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 		$query_params = Mage::app()->getRequest()->getParams();
 		/** @var Mage_Catalog_Model_Resource_Product_Collection $products */
 		$products = Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect('*');
-		$products->setVisibility([V::VISIBILITY_BOTH, V::VISIBILITY_IN_CATALOG, V::VISIBILITY_IN_SEARCH]);
+		/**
+		 * 2019-10-30
+		 * 1) «if a product has a Status of "Disabled" we'd still want it in the feed,
+		 * but we'd want to set the inventoryquantity to -9999»:
+		 * https://github.com/justuno-com/m1/issues/4
+		 * 2) I do not use
+		 * 		$products->setVisibility([V::VISIBILITY_BOTH, V::VISIBILITY_IN_CATALOG, V::VISIBILITY_IN_SEARCH]);
+		 * because it filters out disabled products.
+		 */
+		$products->addAttributeToFilter('visibility', ['in' => [
+			V::VISIBILITY_BOTH, V::VISIBILITY_IN_CATALOG, V::VISIBILITY_IN_SEARCH
+		]]);
 		if (!empty($query_params['updatedSince'])) {
 			$fromDate = date('Y-m-d H:i:s', strtotime($query_params['updatedSince']));
 			$toDate = date('Y-m-d H:i:s', strtotime('2035-01-01 23:59:59'));
