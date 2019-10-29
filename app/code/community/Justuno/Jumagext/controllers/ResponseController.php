@@ -53,7 +53,10 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 			foreach ($cats as $category_id) {
 				$_cat = Mage::getModel('catalog/category')->load($category_id);
 				$cat_tmp['Description'] = $_cat->getDescription();
-				$cat_tmp['ID'] = $_cat->getId();
+				// 2019-10-30
+				// «json construct types are not correct for some values»:
+				// https://github.com/justuno-com/m1/issues/8
+				$cat_tmp['ID'] = (int)$_cat->getId();
 				// 2019-10-30
 				// «In Categories imageURL is being sent back as a boolean in some cases,
 				// it should always be sent back as a string,
