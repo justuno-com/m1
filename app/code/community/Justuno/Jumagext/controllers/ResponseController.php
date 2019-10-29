@@ -65,8 +65,12 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 				,'ImageURL' => $cat_img_url.$p->getImage()
 				,'MSRP' => $p['msrp']
 				,'Price' => $p['price']
-				,'ReviewsCount' => $rs->getReviewsCount()
-				,'ReviewsRatingSum' => $rs->getRatingSummary()
+				// 2019-10-30
+				// «ReviewsCount and ReviewSums need to be Ints»: https://github.com/justuno-com/m1/issues/11
+				,'ReviewsCount' => (int)$rs->getReviewsCount()
+				// 2019-10-30
+				// «ReviewsCount and ReviewSums need to be Ints»: https://github.com/justuno-com/m1/issues/11
+				,'ReviewsRatingSum' => (int)$rs->getRatingSummary()
 				,'SalePrice' => $p['price']
 				,'Tags' => $this->tags($p)
 				,'Title' => $p['name']
