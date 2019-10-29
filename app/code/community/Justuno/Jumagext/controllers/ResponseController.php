@@ -77,7 +77,14 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 			if ('configurable' === $p->getTypeId()) {
 				$ct = $p->getTypeInstance(); /** @var Mage_Catalog_Model_Product_Type_Configurable $ct */
 				$opts = array_column($ct->getConfigurableAttributesAsArray($p), 'attribute_code', 'id');
-				foreach ($opts as $id => $code) {
+				/**
+				 * 2019-10-30
+				 * «within the ProductResponse and the Variants OptionType is being sent back as OptionType90, 91, etc...
+				 * We need these sent back starting at OptionType1, OptionType2»:
+				 * https://github.com/justuno-com/m1/issues/14
+				 */
+				foreach (array_values($opts) as $id => $code) {
+					$id++;
 					$prod_temp["OptionType$id"] = $code;
 				}
 			}

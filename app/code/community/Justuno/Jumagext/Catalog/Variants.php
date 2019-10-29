@@ -42,7 +42,14 @@ final class Justuno_Jumagext_Catalog_Variants {
 			,'SKU' => $p->getSku()
 			,'Title' => $p->getName()
 		];
-		foreach ($opts as $id => $code) {
+		/**
+		 * 2019-10-30
+		 * «within the ProductResponse and the Variants OptionType is being sent back as OptionType90, 91, etc...
+		 * We need these sent back starting at OptionType1, OptionType2»:
+		 * https://github.com/justuno-com/m1/issues/14
+		 */
+		foreach (array_values($opts) as $id => $code) {
+			$id++;
 			$r["Option$id"] = $p->getAttributeText($code);
 		}
 		return $r;
