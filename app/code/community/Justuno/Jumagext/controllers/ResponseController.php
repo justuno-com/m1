@@ -80,7 +80,10 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 			$prod_temp = [
 				'Categories' => $categoryData
 				,'CreatedAt' => $p['created_at']
-				,'ID' => $p['sku']
+				// 2019-10-30
+				// «The parent ID is pulling the sku, it should be pulling the ID like the variant does»:
+				// https://github.com/justuno-com/m1/issues/19
+				,'ID' => $p->getId()
 				/**
 				 * 2019-10-30
 				 * 1) «MSRP, Price, SalePrice, Variants.MSRP, and Variants.SalePrice all need to be Floats,
