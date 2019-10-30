@@ -11,8 +11,8 @@ final class Justuno_Jumagext_Response {
 	 * @return array(string => mixed)
 	 */
 	static function filter(array $a) {
-		$r = [];
-		foreach ($a as $k => $v) {
+		$r = []; /** @var array(string => mixed) $r */
+		foreach ($a as $k => $v) { /** @var string $k */ /** @var mixed $v */
 			if (!in_array($v, ['', null], true)) {
 				$r[$k] = !is_array($v) ? $v : self::filter($v);
 			}
