@@ -4,7 +4,7 @@
 		<Justuno_Jumagext>
 			<author>Dmitry Fedyuk</author>
 			<url>https://www.upwork.com/fl/mage2pro</url>
-			<version>1.2.4</version>
+			<version>1.2.5</version>
 		</Justuno_Jumagext>
 	</modules>
 	<frontend>
@@ -15,6 +15,18 @@
 				</jumagext>
 			</updates>
 		</layout>
+		<product>
+			<configurable>
+				<child>
+<!-- 2019-10-30
+1) «For the variants, I get no title returned»: https://github.com/justuno-com/m1/issues/23
+2) @see \Mage_Catalog_Model_Product_Type_Configurable::getUsedProducts() -->
+					<attributes>
+						<name/>
+					</attributes>
+				</child>
+			</configurable>
+		</product>
 		<routers>
 			<jumagext>
 				<use>standard</use>
