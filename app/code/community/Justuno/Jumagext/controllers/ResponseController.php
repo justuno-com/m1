@@ -92,10 +92,14 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 				 * https://github.com/justuno-com/m1/issues/6
 				 */
 				,'MSRP' => (float)($p['msrp'] ?: $p->getPrice())
-				// 2019-10-30
-				// «MSRP, Price, SalePrice, Variants.MSRP, and Variants.SalePrice all need to be Floats,
-				// or if that is not possible then Ints»: https://github.com/justuno-com/m1/issues/10
-				,'Price' => (float)$p['price']
+				 /**
+				  * 2019-10-30
+				  * «MSRP, Price, SalePrice, Variants.MSRP, and Variants.SalePrice all need to be Floats,
+				  * or if that is not possible then Ints»: https://github.com/justuno-com/m1/issues/10
+				  * 2019-10-31
+				  * «Price should be Price > Dynamic Price»: https://github.com/justuno-com/m1/issues/21
+				  */
+				,'Price' => (float)($p['price'] ?: $p->getPrice())
 				// 2019-10-30 «ReviewsCount and ReviewSums need to be Ints»: https://github.com/justuno-com/m1/issues/11
 				,'ReviewsCount' => (int)$rs->getReviewsCount()
 				// 2019-10-30 «ReviewsCount and ReviewSums need to be Ints»: https://github.com/justuno-com/m1/issues/11
