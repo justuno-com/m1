@@ -51,8 +51,12 @@ final class Justuno_Jumagext_Catalog_Variants {
 			 * https://github.com/justuno-com/m1/issues/7
 			 * 3) «If their isn't an MSRP for some reason just use the salesprice»:
 			 * https://github.com/justuno-com/m1/issues/6
+			 * 2019-10-31
+			 * «For variant pricing,
+			 * i would want the flow to be the same as the MSRP and SalePrice from the parent above
+			 * but using the variant's pricing of course»: https://github.com/justuno-com/m1/issues/25
 			 */
-			,'MSRP' => (float)($p['msrp'] ?: ($parent ? $parent['msrp'] : $p->getPrice()))
+			,'MSRP' => (float)($p['msrp'] ?: ($p['price'] ?: $p->getPrice()))
 			// 2019-10-30
 			// «MSRP, Price, SalePrice, Variants.MSRP, and Variants.SalePrice all need to be Floats,
 			// or if that is not possible then Ints»: https://github.com/justuno-com/m1/issues/10
