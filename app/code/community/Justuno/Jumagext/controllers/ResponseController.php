@@ -90,8 +90,11 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 				 * or if that is not possible then Ints»: https://github.com/justuno-com/m1/issues/10
 				 * 2) «If their isn't an MSRP for some reason just use the salesprice»:
 				 * https://github.com/justuno-com/m1/issues/6
+				 * 2019-10-31
+				 * «The MSRP should pull in this order MSRP > Price > Dynamic Price»:
+				 * https://github.com/justuno-com/m1/issues/20
 				 */
-				,'MSRP' => (float)($p['msrp'] ?: $p->getPrice())
+				,'MSRP' => (float)($p['msrp'] ?: ($p['price'] ?: $p->getPrice()))
 				 /**
 				  * 2019-10-30
 				  * «MSRP, Price, SalePrice, Variants.MSRP, and Variants.SalePrice all need to be Floats,
