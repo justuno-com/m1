@@ -11,6 +11,9 @@ final class Justuno_Jumagext_Catalog_Images {
 	static function p(P $p) { /** @var array(array(string => mixed)) $r */
 		$r = [];
 		$h = Mage::helper('catalog/image'); /** @var Mage_Catalog_Helper_Image $h */
+		// 2019-20-31
+		// «Faster way to load media images in a product collection»: https://magento.stackexchange.com/a/153570
+		$p->getResource()->getAttribute('media_gallery')->getBackend()->afterLoad($p);
 		// 2019-10-30
 		// «"ImageURL" should be "imageURL1" and we should have "imageURL2" and "ImageURL3"
 		// if there are image available»: https://github.com/justuno-com/m1/issues/17

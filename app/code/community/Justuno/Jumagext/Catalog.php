@@ -50,9 +50,6 @@ final class Justuno_Jumagext_Catalog {
 		$products->getSelect()->limit($limit, $page-1);
 		$brand = Mage::getStoreConfig('justuno/justuno_settings/brand_attributure');
 		R::res(array_values(array_map(function(P $p) use($brand) { /** @var array(string => mixed) $r */
-			// 2019-08-28 Otherwise $p does not contain the product's price
-			// 2019-08-30 The collection does not load the media gallery.
-			$p = $p->load($p->getId()); /** @var P $p */
 			$rs = new RS; /** @var RS $rs */
 			$rs->load($p->getId());
 			$cc = $p->getCategoryCollection(); /** @var CC $cc */
