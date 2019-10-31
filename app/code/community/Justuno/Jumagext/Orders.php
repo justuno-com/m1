@@ -48,16 +48,15 @@ final class Justuno_Jumagext_Orders {
 					,'VariantId' => ''
 				];
 			}
-			$cntry = $ip = $TotalRecords = '';
-			$order_temp = [
-				'CountryCode' => $cntry
+			$ordersArray[] = [
+				'CountryCode' => ''
 				,'CreatedAt' => $o['created_at']
 				,'Currency' => $o['order_currency_code']
 				,'Customer' => $customerData
 				,'CustomerId' => $o['customer_id']
 				,'Email' => $o['customer_email']
 				,'ID' => $o['increment_id']
-				,'IP' => $ip
+				,'IP' => ''
 				,'LineItems' => $lineItems
 				,'OrderNumber' => $o['entity_id']
 				,'ShippingPrice' => $o['shipping_amount']
@@ -69,7 +68,6 @@ final class Justuno_Jumagext_Orders {
 				,'TotalTax' => $o['tax_amount']
 				,'UpdatedAt' => $o['updated_at']
 			];
-			$ordersArray[] = $order_temp;
 		}
 		R::res($ordersArray);
 	}
@@ -83,30 +81,25 @@ final class Justuno_Jumagext_Orders {
 	private static function getCustomerData($id) {
 		$c = new C; /** @var C $c */
 		$c->load($id);
-		$def_bill_address = $c->getDefaultBillingAddress()->getData();
-		$orders = Mage::getModel('sales/order')->getCollection()->addFieldToFilter('customer_id', $id);
-		$OrdersCount = $orders->count();
-		$totalSpent = 0;
-		foreach ($orders as $order) {
-			$total = $order->getGrandTotal();
-			$totalSpent+= $total;
-		}
+		$ba = $c->getDefaultBillingAddress()->getData();
+		$oc = new OC; /** @var OC $oc */
+		$oc->addFieldToFilter('customer_id', $id);
 		return [
-			'address1' => $def_bill_address['street']
+			'address1' => $ba['street']
 			,'address2' => ''
-			,'City' => $def_bill_address['city']
-			,'CountryCode' => $def_bill_address['country_id']
+			,'City' => $ba['city']
+			,'CountryCode' => $ba['country_id']
 			,'CreatedAt' => $c['created_at']
 			,'email' => $c['email']
 			,'FirstName' => $c['firstname']
 			,'id' => $c['entity_id']
 			,'LastName' => $c['lastname']
-			,'OrdersCount' => $OrdersCount
+			,'OrdersCount' => $oc->count()
 			,'ProvinceCode' => ''
 			,'Tags' => ''
-			,'TotalSpend'  => $totalSpent
+			,'TotalSpend' => array_sum(array_map(function(O $o) {return $o->getGrandTotal();}, $oc->getItems()))
 			,'UpdatedAt' => $c['updated_at']
-			,'Zip' => $def_bill_address['postcode']
+			,'Zip' => $ba['postcode']
 		];
 	}
 }
