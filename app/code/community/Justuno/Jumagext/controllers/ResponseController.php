@@ -49,7 +49,7 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 		$brand_attr = Mage::getStoreConfig('justuno/justuno_settings/brand_attributure', $this->storeId);
 		foreach ($products as $p) { /** @var P $p */
 			// 2019-08-28 Otherwise $p does not contain the product's price
-			// 2019-08-30 The collection does not load media gallery.
+			// 2019-08-30 The collection does not load the media gallery.
 			$p = $p->load($p->getId()); /** @var P $p */
 			$cats = $p->getCategoryIds();
 			$categoryData = array();
