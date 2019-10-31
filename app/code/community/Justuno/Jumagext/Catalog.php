@@ -53,10 +53,6 @@ final class Justuno_Jumagext_Catalog {
 			// 2019-08-28 Otherwise $p does not contain the product's price
 			// 2019-08-30 The collection does not load the media gallery.
 			$p = $p->load($p->getId()); /** @var P $p */
-			// 2019-10-30
-			// "Add the `ReviewsCount` and `ReviewsRatingSum` values to the `catalog` response":
-			// https://github.com/justuno-com/m1/issues/15
-			$p->getRatingSummary();
 			$rs = new RS; /** @var RS $rs */
 			$rs->load($p->getId());
 			$cc = $p->getCategoryCollection(); /** @var CC $cc */
@@ -103,7 +99,10 @@ final class Justuno_Jumagext_Catalog {
 				,'Price' => (float)($p['price'] ?: $p->getPrice())
 				// 2019-10-30 «ReviewsCount and ReviewSums need to be Ints»: https://github.com/justuno-com/m1/issues/11
 				,'ReviewsCount' => (int)$rs->getReviewsCount()
-				// 2019-10-30 «ReviewsCount and ReviewSums need to be Ints»: https://github.com/justuno-com/m1/issues/11
+				// 2019-10-30
+				// 1) "Add the `ReviewsCount` and `ReviewsRatingSum` values to the `catalog` response":
+				// https://github.com/justuno-com/m1/issues/15
+				// 2) «ReviewsCount and ReviewSums need to be Ints»: https://github.com/justuno-com/m1/issues/11
 				,'ReviewsRatingSum' => (int)$rs->getRatingSummary()
 				// 2019-10-30
 				// «MSRP, Price, SalePrice, Variants.MSRP, and Variants.SalePrice all need to be Floats,
