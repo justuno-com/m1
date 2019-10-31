@@ -8,18 +8,20 @@ final class Justuno_Jumagext_Orders {
 	 */
 	static function p() {
 		R::authorize();
-		$query_params = Mage::app()->getRequest()->getParams();
+		$req = Mage::app()->getRequest(); /** @var Mage_Core_Controller_Request_Http $req */
+		$query_params = $req->getParams();
 		$ordersCollection = Mage::getModel('sales/order')->getCollection();
-		if (!empty($query_params['updatedSince'])) {
-		  $fromDate = date('Y-m-d H:i:s', strtotime($query_params['updatedSince']));
-		  $toDate = date('Y-m-d H:i:s', strtotime('2035-01-01 23:59:59'));
+		$dateFormat = 'Y-m-d H:i:s'; /** @var string $dateFormat */
+		if ($updatedSince = $req->getParam('updatedSince')) {
+		  $fromDate = date($dateFormat, strtotime($updatedSince));
+		  $toDate = date($dateFormat, strtotime('2035-01-01 23:59:59'));
 		  $timezone = $timezone =  Mage::getStoreConfig('general/locale/timezone');
 		  $fromDate = new DateTime($fromDate, new DateTimeZone($timezone));
 		  $fromDate = $fromDate->format('U');
-		  $fromDate = date("Y-m-d H:i:s",$fromDate);
+		  $fromDate = date($dateFormat,$fromDate);
 		  $toDate = new DateTime($toDate, new DateTimeZone($timezone));
 		  $toDate = $toDate->format('U');
-		  $toDate = date("Y-m-d H:i:s",$toDate);
+		  $toDate = date($dateFormat,$toDate);
 		  $ordersCollection->addFieldToFilter('updated_at', array('from' => $fromDate, 'to' => $toDate));
 		}
 		if(!empty($query_params['sortOrders'])) {
@@ -30,42 +32,42 @@ final class Justuno_Jumagext_Orders {
 		$ordersCollection->getSelect()->limit($limit, $page-1);
 		$ordersArray = array();
 		foreach($ordersCollection->getData() as $order) {
-			if(!empty($order["customer_id"])) {
-				$customerData = self::getCustomerData($order["customer_id"]);
+			if(!empty($order['customer_id'])) {
+				$customerData = self::getCustomerData($order['customer_id']);
 			}
 			$orderItemsCollection = Mage::getModel('sales/order_item')->getCollection()->addAttributeToFilter(
-				'order_id', $order["entity_id"]
+				'order_id', $order['entity_id']
 			);
 			foreach($orderItemsCollection->getData() as $item) {
 				$lineItems = array(
-					'ProductId'   => $item["product_id"],
-					'OrderId'     => $item["order_id"],
+					'ProductId'   => $item['product_id'],
+					'OrderId'     => $item['order_id'],
 					'VariantId'   => '',
-					'Price'       => $item["price"],
-					'TotalDiscount'=> $item["discount_amount"]
+					'Price'       => $item['price'],
+					'TotalDiscount'=> $item['discount_amount']
 				);
 			}
-			$cntry = $ip = $TotalRecords = "";
-			$order_temp = array(
-				'ID'            => $order["increment_id"],
-				'OrderNumber'   => $order["entity_id"],
-				'CustomerId'    => $order["customer_id"],
-				'Email'         => $order["customer_email"],
-				'CreatedAt'     => $order["created_at"],
-				'UpdatedAt'     => $order["updated_at"],
-				'TotalPrice'    => $order["grand_total"],
-				'SubtotalPrice' => $order["subtotal"],
-				'ShippingPrice' => $order["shipping_amount"],
-				'TotalTax'      => $order["tax_amount"],
-				'TotalDiscounts'=> $order["base_discount_amount"],
-				'TotalItems'    => $order["total_item_count"],
-				'Currency'      => $order["order_currency_code"],
-				'Status'        => $order["status"],
-				'IP'            => $ip,
-				'CountryCode'   => $cntry,
-				'LineItems'     => $lineItems,
-				'Customer'      => $customerData
-			);
+			$cntry = $ip = $TotalRecords = '';
+			$order_temp = [
+				'CountryCode' => $cntry
+				,'CreatedAt' => $order['created_at']
+				,'Currency' => $order['order_currency_code']
+				,'Customer' => $customerData
+				,'CustomerId' => $order['customer_id']
+				,'Email' => $order['customer_email']
+				,'ID' => $order['increment_id']
+				,'IP' => $ip
+				,'LineItems' => $lineItems
+				,'OrderNumber' => $order['entity_id']
+				,'ShippingPrice' => $order['shipping_amount']
+				,'Status' => $order['status']
+				,'SubtotalPrice' => $order['subtotal']
+				,'TotalDiscounts' => $order['base_discount_amount']
+				,'TotalItems' => $order['total_item_count']
+				,'TotalPrice' => $order['grand_total']
+				,'TotalTax' => $order['tax_amount']
+				,'UpdatedAt' => $order['updated_at']
+			];
 			$ordersArray[] = $order_temp;
 		}
 		print_r(json_encode($ordersArray));
