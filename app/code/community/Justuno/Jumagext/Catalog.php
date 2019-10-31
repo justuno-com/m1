@@ -117,7 +117,12 @@ final class Justuno_Jumagext_Catalog {
 					$r["OptionType$id"] = $code;
 				}
 			}
-			return $r + ['BrandId' => $brand, 'BrandName' => $p->getAttributeText($brand) ?: null];
+			/**
+			 * 2019-11-01
+			 * If $brand is null, then @uses Mage_Catalog_Model_Product::getAttributeText() fails.
+			 * https://www.upwork.com/messages/rooms/room_e6b2d182b68bdb5e9bf343521534b1b6/story_4e29dacff68f2d918eff2f28bb3d256c
+			 */
+			return $r + ['BrandId' => $brand, 'BrandName' => !$brand ? null : ($p->getAttributeText($brand) ?: null)];
 		}, $pc->getItems())));
 	}
 
