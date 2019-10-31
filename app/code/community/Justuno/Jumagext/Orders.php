@@ -91,23 +91,22 @@ final class Justuno_Jumagext_Orders {
 			$total = $order->getGrandTotal();
 			$totalSpent+= $total;
 		}
-		$customerArray = array(
-			'id'        => $c["entity_id"],
-			'email'     => $c["email"],
-			'CreatedAt' => $c["created_at"],
-			'UpdatedAt' => $c["updated_at"],
-			'FirstName' => $c["firstname"],
-			'LastName'  => $c["lastname"],
-			'OrdersCount' => $OrdersCount,
-			'TotalSpend'  => $totalSpent,
-			'Tags'        => '',
-			'address1'    => $def_bill_address["street"],
-			'address2'    => '',
-			'City'        => $def_bill_address["city"],
-			'Zip'         => $def_bill_address["postcode"],
-			'ProvinceCode'=> '',
-			'CountryCode' => $def_bill_address["country_id"]
-		);
-		return $customerArray;
+		return [
+			'address1' => $def_bill_address['street']
+			,'address2' => ''
+			,'City' => $def_bill_address['city']
+			,'CountryCode' => $def_bill_address['country_id']
+			,'CreatedAt' => $c['created_at']
+			,'email' => $c['email']
+			,'FirstName' => $c['firstname']
+			,'id' => $c['entity_id']
+			,'LastName' => $c['lastname']
+			,'OrdersCount' => $OrdersCount
+			,'ProvinceCode' => ''
+			,'Tags' => ''
+			,'TotalSpend'  => $totalSpent
+			,'UpdatedAt' => $c['updated_at']
+			,'Zip' => $def_bill_address['postcode']
+		];
 	}
 }
