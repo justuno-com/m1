@@ -4,6 +4,7 @@ use Mage_Catalog_Model_Category as C;
 use Mage_Catalog_Model_Product as P;
 use Mage_Catalog_Model_Product_Visibility as V;
 use Mage_Catalog_Model_Resource_Category_Collection as CC;
+use Mage_Catalog_Model_Resource_Product_Collection as PC;
 use Mage_Review_Model_Review_Summary as RS;
 use Mage_Tag_Model_Resource_Tag_Collection as TC;
 use Mage_Tag_Model_Tag as T;
@@ -16,8 +17,8 @@ final class Justuno_Jumagext_Catalog {
 	static function p() {
 		R::authorize();
 		$query_params = Mage::app()->getRequest()->getParams();
-		/** @var Mage_Catalog_Model_Resource_Product_Collection $products */
-		$products = Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect('*');
+		$pc = new PC; /** @var PC $pc */
+		$pc->addAttributeToSelect('*');
 		/**
 		 * 2019-10-30
 		 * 1) «if a product has a Status of "Disabled" we'd still want it in the feed,
@@ -27,16 +28,16 @@ final class Justuno_Jumagext_Catalog {
 		 * 		$products->setVisibility([V::VISIBILITY_BOTH, V::VISIBILITY_IN_CATALOG, V::VISIBILITY_IN_SEARCH]);
 		 * because it filters out disabled products.
 		 */
-		$products->addAttributeToFilter('visibility', ['in' => [
+		$pc->addAttributeToFilter('visibility', ['in' => [
 			V::VISIBILITY_BOTH, V::VISIBILITY_IN_CATALOG, V::VISIBILITY_IN_SEARCH
 		]]);
-		R::filterByDate($products);
+		R::filterByDate($pc);
 		if(!empty($query_params['sortProducts'])) {
-			$products->getSelect()->order($query_params['sortProducts'].' DESC');
+			$pc->getSelect()->order($query_params['sortProducts'].' DESC');
 		}
 		$page = !empty($query_params['currentPage']) ? $query_params['currentPage'] : 1;
 		$limit = !empty($query_params['pageSize']) ? $query_params['pageSize'] : 10;
-		$products->getSelect()->limit($limit, $page-1);
+		$pc->getSelect()->limit($limit, $page-1);
 		$brand = Mage::getStoreConfig('justuno/justuno_settings/brand_attributure');
 		R::res(array_values(array_map(function(P $p) use($brand) { /** @var array(string => mixed) $r */
 			$rs = new RS; /** @var RS $rs */
@@ -122,7 +123,7 @@ final class Justuno_Jumagext_Catalog {
 				}
 			}
 			return $r + ['BrandId' => $brand, 'BrandName' => $p->getAttributeText($brand) ?: null];
-		}, $products->getItems())));
+		}, $pc->getItems())));
 	}
 
 	/**
