@@ -16,10 +16,18 @@ final class Justuno_Jumagext_Catalog_Variants {
 		}
 		else {
 			$ct = $p->getTypeInstance(); /** @var Mage_Catalog_Model_Product_Type_Configurable $ct */
-			$opts = array_column($ct->getConfigurableAttributesAsArray($p), 'attribute_code', 'id');
-			$r = array_values(array_map(function(P $c) use($opts, $p) {return
-				self::variant($c, $p, $opts)
-			;}, $ct->getUsedProducts(null, $p)));
+			// 2019-30-31
+			// "A configurable product without any associated child products does not produce variants":
+			// https://github.com/justuno-com/m1/issues/26
+			if (!($children = $ct->getUsedProducts(null, $p))) { /** @var P $children */
+				$r = self::variant($p);
+			}
+			else {
+				$opts = array_column($ct->getConfigurableAttributesAsArray($p), 'attribute_code', 'id');
+				$r = array_values(array_map(function(P $c) use($opts, $p) {return
+					self::variant($c, $p, $opts)
+				;}, $children));
+			}
 		}
 		return $r;
 	}
