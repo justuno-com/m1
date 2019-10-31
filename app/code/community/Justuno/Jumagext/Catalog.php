@@ -46,9 +46,8 @@ final class Justuno_Jumagext_Catalog {
 		$page = !empty($query_params['currentPage']) ? $query_params['currentPage'] : 1;
 		$limit = !empty($query_params['pageSize']) ? $query_params['pageSize'] : 10;
 		$products->getSelect()->limit($limit, $page-1);
-		$productsArray = array();
-		$brand_attr = Mage::getStoreConfig('justuno/justuno_settings/brand_attributure');
-		foreach ($products as $p) { /** @var P $p */
+		$brand = Mage::getStoreConfig('justuno/justuno_settings/brand_attributure');
+		R::res(array_values(array_map(function(P $p) use($brand) { /** @var array(string => mixed) $r */
 			// 2019-08-28 Otherwise $p does not contain the product's price
 			// 2019-08-30 The collection does not load the media gallery.
 			$p = $p->load($p->getId()); /** @var P $p */
@@ -79,7 +78,7 @@ final class Justuno_Jumagext_Catalog {
 			$p->getRatingSummary();
 			$rs = new RS; /** @var RS $rs */
 			$rs->load($p->getId());
-			$prod_temp = [
+			$r = [
 				'Categories' => $categoryData
 				,'CreatedAt' => $p['created_at']
 				// 2019-10-30
@@ -137,20 +136,11 @@ final class Justuno_Jumagext_Catalog {
 				 */
 				foreach (array_values($opts) as $id => $code) {
 					$id++;
-					$prod_temp["OptionType$id"] = $code;
+					$r["OptionType$id"] = $code;
 				}
 			}
-			if(!empty($brand_attr)) {
-				$brand_attr_val = !empty($p[$brand_attr]) ? $p[$brand_attr] : "";
-				$prod_temp["BrandId"] = $brand_attr;
-				$prod_temp["BrandName"] = $brand_attr_val;
-			}
-			// 2019-10-30
-			// «if a property is null or an empty string do not send it back»:
-			// https://github.com/justuno-com/m1/issues/9
-			$productsArray[] = $prod_temp;
-		}
-		R::res($productsArray);
+			return $r + ['BrandId' => $brand, 'BrandName' => $p->getAttributeText($brand) ?: null];
+		}, $products->getItems())));
 	}
 
 	/**
