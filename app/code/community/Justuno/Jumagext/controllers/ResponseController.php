@@ -42,9 +42,9 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 		if(!empty($query_params['sortProducts'])) {
 			$products->getSelect()->order($query_params['sortProducts'].' DESC');
 		}
-		$page = !empty($query_params['currentPage']) ? $query_params['currentPage'] : 0;
+		$page = !empty($query_params['currentPage']) ? $query_params['currentPage'] : 1;
 		$limit = !empty($query_params['pageSize']) ? $query_params['pageSize'] : 10;
-		$products->getSelect()->limit($limit, $page);
+		$products->getSelect()->limit($limit, $page-1);
 		$productsArray = array();
 		$brand_attr = Mage::getStoreConfig('justuno/justuno_settings/brand_attributure', $this->storeId);
 		foreach ($products as $p) { /** @var P $p */
@@ -59,7 +59,7 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 				// 2019-10-30
 				// «json construct types are not correct for some values»:
 				// https://github.com/justuno-com/m1/issues/8
-				$cat_tmp['ID'] = (int)$_cat->getId();
+				$cat_tmp['ID'] = $_cat->getId();
 				// 2019-10-30
 				// «In Categories imageURL is being sent back as a boolean in some cases,
 				// it should always be sent back as a string,
@@ -120,7 +120,7 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 				 * 2019-10-30
 				 * «if a product doesn't have parent/child like structure,
 				 * I still need at least one variant in the Variants array»:
-				 * https://github.com/justuno-com/m1/issues/5 
+				 * https://github.com/justuno-com/m1/issues/5
 				 */
 				,'Variants' => Justuno_Jumagext_Catalog_Variants::p($p)
 			] + Justuno_Jumagext_Catalog_Images::p($p);
@@ -204,7 +204,7 @@ final class Justuno_Jumagext_ResponseController extends Mage_Core_Controller_Fro
 		}
 		$page = !empty($query_params['currentPage']) ? $query_params['currentPage'] : 1;
 		$limit = !empty($query_params['pageSize']) ? $query_params['pageSize'] : 10;
-		$ordersCollection->getSelect()->limit($limit, $page);
+		$ordersCollection->getSelect()->limit($limit, $page-1);
 		$ordersArray = array();
 		foreach($ordersCollection->getData() as $order) {
 			if(!empty($order["customer_id"])) {
