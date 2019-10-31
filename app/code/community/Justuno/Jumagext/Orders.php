@@ -1,6 +1,9 @@
 <?php
 use Justuno_Jumagext_Response as R;
+use Mage_Sales_Model_Order as O;
+use Mage_Sales_Model_Order_Item as OI;
 use Mage_Sales_Model_Resource_Order_Collection as OC;
+use Mage_Sales_Model_Resource_Order_Item_Collection as OIC;
 // 2019-10-31
 final class Justuno_Jumagext_Orders {
 	/**
@@ -29,42 +32,41 @@ final class Justuno_Jumagext_Orders {
 		}
 		$oc->getSelect()->limit($req->getParams('pageSize', 10), $req->getParams('currentPage', 1) - 1);
 		$ordersArray = [];
-		foreach ($oc as $order) {
-			if(!empty($order['customer_id'])) {
-				$customerData = self::getCustomerData($order['customer_id']);
+		foreach ($oc as $o) { /** @var O $o */
+			if(!empty($o['customer_id'])) {
+				$customerData = self::getCustomerData($o['customer_id']);
 			}
-			$orderItemsCollection = Mage::getModel('sales/order_item')->getCollection()->addAttributeToFilter(
-				'order_id', $order['entity_id']
-			);
-			foreach($orderItemsCollection->getData() as $item) {
+			$oic = new OIC; /** @var OIC $oic */
+			$oic->addAttributeToFilter('order_id', $o['entity_id']);
+			foreach($oic as $oi) { /** @var OI $oi */
 				$lineItems = [
-					'OrderId' => $item['order_id']
-					,'Price' => $item['price']
-					,'ProductId' => $item['product_id']
-					,'TotalDiscount' => $item['discount_amount']
+					'OrderId' => $oi['order_id']
+					,'Price' => $oi['price']
+					,'ProductId' => $oi['product_id']
+					,'TotalDiscount' => $oi['discount_amount']
 					,'VariantId' => ''
 				];
 			}
 			$cntry = $ip = $TotalRecords = '';
 			$order_temp = [
 				'CountryCode' => $cntry
-				,'CreatedAt' => $order['created_at']
-				,'Currency' => $order['order_currency_code']
+				,'CreatedAt' => $o['created_at']
+				,'Currency' => $o['order_currency_code']
 				,'Customer' => $customerData
-				,'CustomerId' => $order['customer_id']
-				,'Email' => $order['customer_email']
-				,'ID' => $order['increment_id']
+				,'CustomerId' => $o['customer_id']
+				,'Email' => $o['customer_email']
+				,'ID' => $o['increment_id']
 				,'IP' => $ip
 				,'LineItems' => $lineItems
-				,'OrderNumber' => $order['entity_id']
-				,'ShippingPrice' => $order['shipping_amount']
-				,'Status' => $order['status']
-				,'SubtotalPrice' => $order['subtotal']
-				,'TotalDiscounts' => $order['base_discount_amount']
-				,'TotalItems' => $order['total_item_count']
-				,'TotalPrice' => $order['grand_total']
-				,'TotalTax' => $order['tax_amount']
-				,'UpdatedAt' => $order['updated_at']
+				,'OrderNumber' => $o['entity_id']
+				,'ShippingPrice' => $o['shipping_amount']
+				,'Status' => $o['status']
+				,'SubtotalPrice' => $o['subtotal']
+				,'TotalDiscounts' => $o['base_discount_amount']
+				,'TotalItems' => $o['total_item_count']
+				,'TotalPrice' => $o['grand_total']
+				,'TotalTax' => $o['tax_amount']
+				,'UpdatedAt' => $o['updated_at']
 			];
 			$ordersArray[] = $order_temp;
 		}
