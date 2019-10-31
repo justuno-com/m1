@@ -1,7 +1,9 @@
 <?php
 use Justuno_Jumagext_Response as R;
+use Mage_Catalog_Model_Category as C;
 use Mage_Catalog_Model_Product as P;
 use Mage_Catalog_Model_Product_Visibility as V;
+use Mage_Catalog_Model_Resource_Category_Collection as CC;
 use Mage_Review_Model_Review_Summary as RS;
 use Mage_Tag_Model_Resource_Tag_Collection as TC;
 use Mage_Tag_Model_Tag as T;
@@ -51,35 +53,30 @@ final class Justuno_Jumagext_Catalog {
 			// 2019-08-28 Otherwise $p does not contain the product's price
 			// 2019-08-30 The collection does not load the media gallery.
 			$p = $p->load($p->getId()); /** @var P $p */
-			$cats = $p->getCategoryIds();
-			$categoryData = array();
-			foreach ($cats as $category_id) {
-				/** @var Mage_Catalog_Model_Category $_cat */
-				$_cat = Mage::getModel('catalog/category')->load($category_id);
-				$cat_tmp['Description'] = $_cat['description'];
-				// 2019-10-30
-				// «json construct types are not correct for some values»:
-				// https://github.com/justuno-com/m1/issues/8
-				$cat_tmp['ID'] = $_cat->getId();
-				// 2019-10-30
-				// «In Categories imageURL is being sent back as a boolean in some cases,
-				// it should always be sent back as a string,
-				// if there is not url just don't send the property back»:
-				// https://github.com/justuno-com/m1/issues/12
-				$cat_tmp['ImageURL'] = $_cat->getImageUrl() ?: null;
-				$cat_tmp['Keywords'] = $_cat['meta_keywords'];
-				$cat_tmp['Name'] = $_cat->getName();
-				$cat_tmp['URL'] = $_cat->getUrl();
-				$categoryData[] = $cat_tmp;
-			}
 			// 2019-10-30
 			// "Add the `ReviewsCount` and `ReviewsRatingSum` values to the `catalog` response":
 			// https://github.com/justuno-com/m1/issues/15
 			$p->getRatingSummary();
 			$rs = new RS; /** @var RS $rs */
 			$rs->load($p->getId());
+			$cc = $p->getCategoryCollection(); /** @var CC $cc */
 			$r = [
-				'Categories' => $categoryData
+				'Categories' => array_values(array_map(function(C $c) {return [
+					'Description' => $c['description']
+					// 2019-10-30
+					// «json construct types are not correct for some values»:
+					// https://github.com/justuno-com/m1/issues/8
+					,'ID' => $c->getId()
+					// 2019-10-30
+					// «In Categories imageURL is being sent back as a boolean in some cases,
+					// it should always be sent back as a string,
+					// if there is not url just don't send the property back»:
+					// https://github.com/justuno-com/m1/issues/12
+					,'ImageURL' => $c->getImageUrl() ?: null
+					,'Keywords' => $c['meta_keywords']
+					,'Name' => $c->getName()
+					,'URL' => $c->getUrl()
+				];}, $cc->addAttributeToSelect('*')->addFieldToFilter('level', ['neq' => 1])->getItems()))
 				,'CreatedAt' => $p['created_at']
 				// 2019-10-30
 				// «The parent ID is pulling the sku, it should be pulling the ID like the variant does»:
