@@ -25,29 +25,6 @@ final class Justuno_Jumagext_Response {
 	 * 2019-10-31
 	 * @used-by Justuno_Jumagext_Catalog::p()
 	 * @used-by Justuno_Jumagext_Orders::p()
-	 * @param $c $c
-	 */
-	static function filterByDate(C $c) {
-		if ($since = Mage::app()->getRequest()->getParam('updatedSince')) { /** @var string $since */
-			/**
-			 * 2019-10-31
-			 * @param string $s
-			 * @return string
-			 */
-			$d = function($s) {
-				$f = 'Y-m-d H:i:s'; /** @var string $f */
-				$tz = Mage::getStoreConfig('general/locale/timezone'); /** @var string $tz */
-				$dt = new DateTime(date($f, strtotime($s)), new DateTimeZone($tz));	/** @var DateTime $dt */
-				return date($f, $dt->format('U'));
-			};
-			$c->addFieldToFilter('updated_at', ['from' => $d($since), 'to' => $d('2035-01-01 23:59:59')]);
-		}
-	}
-
-	/**
-	 * 2019-10-31
-	 * @used-by Justuno_Jumagext_Catalog::p()
-	 * @used-by Justuno_Jumagext_Orders::p()
 	 * @param mixed[] $a
 	 */
 	static function res(array $a) {

@@ -1,4 +1,5 @@
 <?php
+use Justuno_Jumagext_Filter as Filter;
 use Justuno_Jumagext_OI as OIH;
 use Justuno_Jumagext_Response as R;
 use Mage_Customer_Model_Customer as C;
@@ -14,13 +15,8 @@ final class Justuno_Jumagext_Orders {
 	 */
 	static function p() {
 		R::authorize();
-		$req = Mage::app()->getRequest(); /** @var Mage_Core_Controller_Request_Http $req */
 		$oc = new OC; /** @var OC $oc */
-		R::filterByDate($oc);
-		if ($sortOrders = $req->getParam('sortOrders')) {
-			$oc->getSelect()->order("$sortOrders ASC");
-		}
-		$oc->getSelect()->limit($req->getParam('pageSize', 10), $req->getParam('currentPage', 1) - 1);
+		Filter::p($oc);
 		R::res(array_values(array_map(function(O $o) {return [
 			'CountryCode' => $o->getBillingAddress()->getCountryId()
 			,'CreatedAt' => $o->getCreatedAt()

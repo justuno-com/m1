@@ -1,4 +1,5 @@
 <?php
+use Justuno_Jumagext_Filter as Filter;
 use Justuno_Jumagext_Response as R;
 use Mage_Catalog_Model_Category as C;
 use Mage_Catalog_Model_Product as P;
@@ -16,7 +17,7 @@ final class Justuno_Jumagext_Catalog {
 	 */
 	static function p() {
 		R::authorize();
-		$query_params = Mage::app()->getRequest()->getParams();
+		$req = Mage::app()->getRequest(); /** @var Mage_Core_Controller_Request_Http $req */
 		$pc = new PC; /** @var PC $pc */
 		$pc->addAttributeToSelect('*');
 		/**
@@ -31,13 +32,7 @@ final class Justuno_Jumagext_Catalog {
 		$pc->addAttributeToFilter('visibility', ['in' => [
 			V::VISIBILITY_BOTH, V::VISIBILITY_IN_CATALOG, V::VISIBILITY_IN_SEARCH
 		]]);
-		R::filterByDate($pc);
-		if(!empty($query_params['sortProducts'])) {
-			$pc->getSelect()->order($query_params['sortProducts'].' DESC');
-		}
-		$page = !empty($query_params['currentPage']) ? $query_params['currentPage'] : 1;
-		$limit = !empty($query_params['pageSize']) ? $query_params['pageSize'] : 10;
-		$pc->getSelect()->limit($limit, $page-1);
+		Filter::p($pc);
 		$brand = Mage::getStoreConfig('justuno/justuno_settings/brand_attributure');
 		R::res(array_values(array_map(function(P $p) use($brand) { /** @var array(string => mixed) $r */
 			$rs = new RS; /** @var RS $rs */
