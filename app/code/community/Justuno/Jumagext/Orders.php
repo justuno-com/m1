@@ -31,7 +31,7 @@ final class Justuno_Jumagext_Orders {
 		if ($sortOrders = $req->getParam('sortOrders')) {
 			$oc->getSelect()->order("$sortOrders ASC");
 		}
-		$oc->getSelect()->limit($req->getParams('pageSize', 10), $req->getParams('currentPage', 1) - 1);
+		$oc->getSelect()->limit($req->getParam('pageSize', 10), $req->getParam('currentPage', 1) - 1);
 		$ordersArray = [];
 		foreach ($oc as $o) { /** @var O $o */
 			if(!empty($o['customer_id'])) {
