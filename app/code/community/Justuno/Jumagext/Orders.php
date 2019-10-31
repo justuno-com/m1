@@ -34,56 +34,50 @@ final class Justuno_Jumagext_Orders {
 			$oc->getSelect()->order("$sortOrders ASC");
 		}
 		$oc->getSelect()->limit($req->getParam('pageSize', 10), $req->getParam('currentPage', 1) - 1);
-		$ordersArray = [];
-		foreach ($oc as $o) { /** @var O $o */
-			$oic = new OIC; /** @var OIC $oic */
-			$oic->addAttributeToFilter('order_id', $o['entity_id']);
-			$ordersArray[] = [
-				'CountryCode' => ''
-				,'CreatedAt' => $o['created_at']
-				,'Currency' => $o['order_currency_code']
-				/**
-				 * 2019-10-31
-				 * Orders: «if the customer checked out as a guest
-				 * we need still need a Customer object and it needs the ID to be a randomly generated UUID
-				 * or other random string»: https://github.com/justuno-com/m1/issues/30
-				 */
-				,'Customer' => self::customer($o)
-				/**
-				 * 2019-10-31
-				 * Orders: «if the customer checked out as a guest
-				 * we need still need a Customer object and it needs the ID to be a randomly generated UUID
-				 * or other random string»: https://github.com/justuno-com/m1/issues/30
-				 */
-				,'CustomerId' => $o->getCustomerId() ?: $o->getCustomerEmail()
-				,'Email' => $o->getCustomerEmail()
-				,'ID' => $o->getIncrementId()
-				,'IP' => ''
-				,'LineItems' => array_values(array_map(function(OI $i) {return [
-					'OrderId' => $i->getOrderId()
-					// 2019-10-31
-					// Orders: «lineItem prices currently being returned in the orders feed are 0 always»:
-					// https://github.com/justuno-com/m1/issues/31
-					,'Price' => OIH::price($i)
-					,'ProductId' => OIH::top($i)->getProductId()
-					,'TotalDiscount' => $i->getDiscountAmount()
-					// 2019-10-31
-					// Orders: «VariantID for lineItems is currently hardcoded as ''»:
-					// https://github.com/justuno-com/m1/issues/29
-					,'VariantId' => $i->getProductId()
-				];}, array_filter($oic->getItems(), function(OI $i) {return !$i->getChildrenItems();})))
-				,'OrderNumber' => $o['entity_id']
-				,'ShippingPrice' => $o['shipping_amount']
-				,'Status' => $o['status']
-				,'SubtotalPrice' => $o['subtotal']
-				,'TotalDiscounts' => $o['base_discount_amount']
-				,'TotalItems' => $o['total_item_count']
-				,'TotalPrice' => $o['grand_total']
-				,'TotalTax' => $o['tax_amount']
-				,'UpdatedAt' => $o['updated_at']
-			];
-		}
-		R::res($ordersArray);
+		R::res(array_values(array_map(function(O $o) {return [
+			'CountryCode' => $o->getBillingAddress()->getCountryId()
+			,'CreatedAt' => $o['created_at']
+			,'Currency' => $o['order_currency_code']
+			/**
+			 * 2019-10-31
+			 * Orders: «if the customer checked out as a guest
+			 * we need still need a Customer object and it needs the ID to be a randomly generated UUID
+			 * or other random string»: https://github.com/justuno-com/m1/issues/30
+			 */
+			,'Customer' => self::customer($o)
+			/**
+			 * 2019-10-31
+			 * Orders: «if the customer checked out as a guest
+			 * we need still need a Customer object and it needs the ID to be a randomly generated UUID
+			 * or other random string»: https://github.com/justuno-com/m1/issues/30
+			 */
+			,'CustomerId' => $o->getCustomerId() ?: $o->getCustomerEmail()
+			,'Email' => $o->getCustomerEmail()
+			,'ID' => $o->getIncrementId()
+			,'IP' => $o->getRemoteIp()
+			,'LineItems' => array_values(array_map(function(OI $i) {return [
+				'OrderId' => $i->getOrderId()
+				// 2019-10-31
+				// Orders: «lineItem prices currently being returned in the orders feed are 0 always»:
+				// https://github.com/justuno-com/m1/issues/31
+				,'Price' => OIH::price($i)
+				,'ProductId' => OIH::top($i)->getProductId()
+				,'TotalDiscount' => $i->getDiscountAmount()
+				// 2019-10-31
+				// Orders: «VariantID for lineItems is currently hardcoded as ''»:
+				// https://github.com/justuno-com/m1/issues/29
+				,'VariantId' => $i->getProductId()
+			];}, array_filter($o->getAllItems(), function(OI $i) {return !$i->getChildrenItems();})))
+			,'OrderNumber' => $o->getId()
+			,'ShippingPrice' => $o->getShippingAmount()
+			,'Status' => $o->getStatus()
+			,'SubtotalPrice' => $o->getSubtotal()
+			,'TotalDiscounts' => $o->getBaseDiscountAmount()
+			,'TotalItems' => $o->getTotalItemCount()
+			,'TotalPrice' => $o->getGrandTotal()
+			,'TotalTax' => $o->getTaxAmount()
+			,'UpdatedAt' => $o->getUpdatedAt()
+		];}, $oc->getItems())));
 	}
 
 	/**
