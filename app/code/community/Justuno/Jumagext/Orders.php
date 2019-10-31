@@ -68,7 +68,7 @@ final class Justuno_Jumagext_Orders {
 			];
 			$ordersArray[] = $order_temp;
 		}
-		print_r(json_encode($ordersArray));
+		R::res($ordersArray);
 	}
 
 	/**

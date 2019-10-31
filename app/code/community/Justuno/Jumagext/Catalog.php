@@ -150,9 +150,7 @@ final class Justuno_Jumagext_Catalog {
 			// https://github.com/justuno-com/m1/issues/9
 			$productsArray[] = R::filter($prod_temp);
 		}
-		$res = Mage::app()->getResponse(); /** @var Zend_Controller_Response_Http $res */
-		$res->clearHeaders()->setHeader('Content-type','application/json', true);
-		$res->setBody(json_encode($productsArray, JSON_PRETTY_PRINT));
+		R::res($productsArray);
 	}
 
 	/**

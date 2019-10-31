@@ -42,6 +42,18 @@ final class Justuno_Jumagext_Response {
 	/**
 	 * 2019-10-31
 	 * @used-by Justuno_Jumagext_Catalog::p()
+	 * @used-by Justuno_Jumagext_Orders::p()
+	 * @param mixed[] $a
+	 */
+	static function res(array $a) {
+		$r = Mage::app()->getResponse(); /** @var Zend_Controller_Response_Http $r */
+		$r->clearHeaders()->setHeader('Content-type','application/json', true);
+		$r->setBody(json_encode($a, JSON_PRETTY_PRINT));
+	}
+
+	/**
+	 * 2019-10-31
+	 * @used-by Justuno_Jumagext_Catalog::p()
 	 * @used-by Justuno_Jumagext_ResponseController::catalogFirstAction()
 	 * @param string $path
 	 * @return string

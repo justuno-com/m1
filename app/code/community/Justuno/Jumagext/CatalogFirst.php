@@ -9,27 +9,23 @@ final class Justuno_Jumagext_CatalogFirst {
 	static function p() {
 		R::authorize();
 		$req = Mage::app()->getRequest(); /** @var Mage_Core_Controller_Request_Http $req */
-		$params = [
+		$consumer = new Zend_Oauth_Consumer([
 			'accessTokenUrl' => R::url('oauth/token')
 			,'authorizeUrl' => R::url('oauth/authorize')
 			,'callbackUrl' => R::url("{$req->getRouteName()}/{$req->getControllerName()}/callback")
 			,'requestScheme' => Zend_Oauth::REQUEST_SCHEME_HEADER
 			,'requestTokenUrl' => R::url('oauth/initiate')
 			,'siteUrl' => R::url('oauth')
-		];
-		$consumer = new Zend_Oauth_Consumer($params);
-		$restClient = $consumer->getHttpClient($params);
-		$restClient->setUri(R::url('api/rest/products?' . self::query([
+		]);
+		$c = $consumer->getHttpClient(); /** @var Zend_Http_Client $c */
+		$c->setHeaders('Accept', 'application/json');
+		$c->setMethod(Zend_Http_Client::GET);
+		$c->setUri(R::url('api/rest/products?' . self::query([
 			'currentPage' => $req->getParam('currentPage')
 			,'pageSize' => $req->getParam('pageSize')
 			,'sortOrders' => $req->getParam('sortOrders')
 		])));
-		$restClient->setHeaders('Accept', 'application/json');
-		$restClient->setMethod(Zend_Http_Client::GET);
-		$response = $restClient->request();
-		// Here we can see that response body contains json list of products
-		$resp = $response->getBody();
-		print_r($resp);
+		print_r($c->request()->getBody());
 	}
 
 	/**
