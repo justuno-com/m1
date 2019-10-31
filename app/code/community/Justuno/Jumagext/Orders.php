@@ -1,5 +1,6 @@
 <?php
 use Justuno_Jumagext_Response as R;
+use Mage_Customer_Model_Customer as C;
 use Mage_Sales_Model_Order as O;
 use Mage_Sales_Model_Order_Item as OI;
 use Mage_Sales_Model_Resource_Order_Collection as OC;
@@ -75,16 +76,15 @@ final class Justuno_Jumagext_Orders {
 
 	/**
 	 * 2019-10-27
-	 * @used-by ordersAction()
-	 * @param $customerId
+	 * @used-by p()
+	 * @param $id
 	 * @return array
 	 */
-	private static function getCustomerData($customerId) {
-		$customerObj = Mage::getModel('customer/customer')->load($customerId);
-		$customer = $customerObj->getData();
-		$def_bill_address = $customerObj->getDefaultBillingAddress()->getData();
-
-		$orders = Mage::getModel('sales/order')->getCollection()->addFieldToFilter('customer_id',$customerId);
+	private static function getCustomerData($id) {
+		$c = new C; /** @var C $c */
+		$c->load($id);
+		$def_bill_address = $c->getDefaultBillingAddress()->getData();
+		$orders = Mage::getModel('sales/order')->getCollection()->addFieldToFilter('customer_id', $id);
 		$OrdersCount = $orders->count();
 		$totalSpent = 0;
 		foreach ($orders as $order) {
@@ -92,12 +92,12 @@ final class Justuno_Jumagext_Orders {
 			$totalSpent+= $total;
 		}
 		$customerArray = array(
-			'id'        => $customer["entity_id"],
-			'email'     => $customer["email"],
-			'CreatedAt' => $customer["created_at"],
-			'UpdatedAt' => $customer["updated_at"],
-			'FirstName' => $customer["firstname"],
-			'LastName'  => $customer["lastname"],
+			'id'        => $c["entity_id"],
+			'email'     => $c["email"],
+			'CreatedAt' => $c["created_at"],
+			'UpdatedAt' => $c["updated_at"],
+			'FirstName' => $c["firstname"],
+			'LastName'  => $c["lastname"],
 			'OrdersCount' => $OrdersCount,
 			'TotalSpend'  => $totalSpent,
 			'Tags'        => '',
