@@ -23,8 +23,8 @@ final class Justuno_Jumagext_Orders {
 		$oc->getSelect()->limit($req->getParam('pageSize', 10), $req->getParam('currentPage', 1) - 1);
 		R::res(array_values(array_map(function(O $o) {return [
 			'CountryCode' => $o->getBillingAddress()->getCountryId()
-			,'CreatedAt' => $o['created_at']
-			,'Currency' => $o['order_currency_code']
+			,'CreatedAt' => $o->getCreatedAt()
+			,'Currency' => $o->getOrderCurrencyCode()
 			/**
 			 * 2019-10-31
 			 * Orders: «if the customer checked out as a guest
