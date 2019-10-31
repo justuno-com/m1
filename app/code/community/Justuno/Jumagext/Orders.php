@@ -16,7 +16,7 @@ final class Justuno_Jumagext_Orders {
 		R::authorize();
 		$req = Mage::app()->getRequest(); /** @var Mage_Core_Controller_Request_Http $req */
 		$oc = new OC; /** @var OC $oc */
-		self::filterByDate($oc);
+		R::filterByDate($oc);
 		if ($sortOrders = $req->getParam('sortOrders')) {
 			$oc->getSelect()->order("$sortOrders ASC");
 		}
@@ -111,27 +111,5 @@ final class Justuno_Jumagext_Orders {
 			,'UpdatedAt' => $c['updated_at']
 			,'Zip' => $ba->getPostcode()
 		];
-	}
-
-	/**
-	 * 2019-10-31
-	 * @used-by p()
-	 * @param OC $oc
-	 */
-	private static function filterByDate(OC $oc) {
-		if ($since = Mage::app()->getRequest()->getParam('updatedSince')) { /** @var string $since */
-			/**
-			 * 2019-10-31
-			 * @param string $s
-			 * @return string
-			 */
-			$d = function($s) {
-				$f = 'Y-m-d H:i:s'; /** @var string $f */
-				$tz = Mage::getStoreConfig('general/locale/timezone'); /** @var string $tz */
-				$dt = new DateTime(date($f, strtotime($s)), new DateTimeZone($tz));	/** @var DateTime $dt */
-				return date($f, $dt->format('U'));
-			};
-			$oc->addFieldToFilter('updated_at', ['from' => $d($since), 'to' => $d('2035-01-01 23:59:59')]);
-		}
 	}
 }
