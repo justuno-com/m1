@@ -39,15 +39,6 @@ final class Justuno_Jumagext_Orders {
 			}
 			$oic = new OIC; /** @var OIC $oic */
 			$oic->addAttributeToFilter('order_id', $o['entity_id']);
-			foreach($oic as $oi) { /** @var OI $oi */
-				$lineItems = [
-					'OrderId' => $oi['order_id']
-					,'Price' => $oi['price']
-					,'ProductId' => $oi['product_id']
-					,'TotalDiscount' => $oi['discount_amount']
-					,'VariantId' => ''
-				];
-			}
 			$ordersArray[] = [
 				'CountryCode' => ''
 				,'CreatedAt' => $o['created_at']
@@ -57,7 +48,13 @@ final class Justuno_Jumagext_Orders {
 				,'Email' => $o['customer_email']
 				,'ID' => $o['increment_id']
 				,'IP' => ''
-				,'LineItems' => $lineItems
+				,'LineItems' => array_values(array_map(function(OI $i) {return [
+					'OrderId' => $i['order_id']
+					,'Price' => $i['price']
+					,'ProductId' => $i['product_id']
+					,'TotalDiscount' => $i['discount_amount']
+					,'VariantId' => ''
+				];}, $oic->getItems()))
 				,'OrderNumber' => $o['entity_id']
 				,'ShippingPrice' => $o['shipping_amount']
 				,'Status' => $o['status']
