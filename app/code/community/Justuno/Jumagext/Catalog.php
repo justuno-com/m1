@@ -148,7 +148,7 @@ final class Justuno_Jumagext_Catalog {
 			// 2019-10-30
 			// «if a property is null or an empty string do not send it back»:
 			// https://github.com/justuno-com/m1/issues/9
-			$productsArray[] = R::filter($prod_temp);
+			$productsArray[] = $prod_temp;
 		}
 		R::res($productsArray);
 	}

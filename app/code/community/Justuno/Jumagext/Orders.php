@@ -49,20 +49,20 @@ final class Justuno_Jumagext_Orders {
 				// https://github.com/justuno-com/m1/issues/31
 				,'Price' => OIH::price($i)
 				,'ProductId' => OIH::top($i)->getProductId()
-				,'TotalDiscount' => $i->getDiscountAmount()
+				,'TotalDiscount' => (float)$i->getDiscountAmount()
 				// 2019-10-31
 				// Orders: «VariantID for lineItems is currently hardcoded as ''»:
 				// https://github.com/justuno-com/m1/issues/29
 				,'VariantId' => $i->getProductId()
 			];}, array_filter($o->getAllItems(), function(OI $i) {return !$i->getChildrenItems();})))
 			,'OrderNumber' => $o->getId()
-			,'ShippingPrice' => $o->getShippingAmount()
+			,'ShippingPrice' => (float)$o->getShippingAmount()
 			,'Status' => $o->getStatus()
-			,'SubtotalPrice' => $o->getSubtotal()
-			,'TotalDiscounts' => $o->getBaseDiscountAmount()
-			,'TotalItems' => $o->getTotalItemCount()
-			,'TotalPrice' => $o->getGrandTotal()
-			,'TotalTax' => $o->getTaxAmount()
+			,'SubtotalPrice' => (float)$o->getSubtotal()
+			,'TotalDiscounts' =>(float) $o->getDiscountAmount()
+			,'TotalItems' => (int)$o->getTotalItemCount()
+			,'TotalPrice' => (float)$o->getGrandTotal()
+			,'TotalTax' => (float)$o->getTaxAmount()
 			,'UpdatedAt' => $o->getUpdatedAt()
 		];}, $oc->getItems())));
 	}
@@ -89,12 +89,12 @@ final class Justuno_Jumagext_Orders {
 		}
 		$ba = $o->getBillingAddress(); /** @var A $ba */
 		return [
-			'address1' => $ba->getStreet(1)
-			,'address2' => $ba->getStreet(2)
+			'Address1' => $ba->getStreet(1)
+			,'Address2' => $ba->getStreet(2)
 			,'City' => $ba->getCity()
 			,'CountryCode' => $ba->getCountryId()
 			,'CreatedAt' => $c['created_at']
-			,'email' => $o->getCustomerEmail()
+			,'Email' => $o->getCustomerEmail()
 			,'FirstName' => $o->getCustomerFirstname()
 			/**
 			 * 2019-10-31
@@ -102,10 +102,10 @@ final class Justuno_Jumagext_Orders {
 			 * we need still need a Customer object and it needs the ID to be a randomly generated UUID
 			 * or other random string»: https://github.com/justuno-com/m1/issues/30
 			 */
-			,'id' => $o->getCustomerId() ?: $o->getCustomerEmail()
+			,'ID' => $o->getCustomerId() ?: $o->getCustomerEmail()
 			,'LastName' => $o->getCustomerLastname()
 			,'OrdersCount' => $oc->count()
-			,'ProvinceCode' => ''
+			,'ProvinceCode' => $ba->getRegionCode()
 			,'Tags' => ''
 			,'TotalSpend' => array_sum(array_map(function(O $o) {return $o->getGrandTotal();}, $oc->getItems()))
 			,'UpdatedAt' => $c['updated_at']
