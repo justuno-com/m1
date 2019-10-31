@@ -1,4 +1,5 @@
 <?php
+use Justuno_Jumagext_OI as OIH;
 use Justuno_Jumagext_Response as R;
 use Mage_Customer_Model_Customer as C;
 use Mage_Sales_Model_Order as O;
@@ -49,12 +50,12 @@ final class Justuno_Jumagext_Orders {
 				,'ID' => $o['increment_id']
 				,'IP' => ''
 				,'LineItems' => array_values(array_map(function(OI $i) {return [
-					'OrderId' => $i['order_id']
-					,'Price' => $i['price']
-					,'ProductId' => $i['product_id']
-					,'TotalDiscount' => $i['discount_amount']
+					'OrderId' => $i->getOrderId()
+					,'Price' => OIH::price($i)
+					,'ProductId' => $i->getProductId()
+					,'TotalDiscount' => $i->getDiscountAmount()
 					,'VariantId' => ''
-				];}, $oic->getItems()))
+				];}, array_filter($oic->getItems(), function(OI $i) {return !$i->getChildrenItems();})))
 				,'OrderNumber' => $o['entity_id']
 				,'ShippingPrice' => $o['shipping_amount']
 				,'Status' => $o['status']
