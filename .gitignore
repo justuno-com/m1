@@ -4,6 +4,7 @@
 # http://stackoverflow.com/questions/8024924#comment15884195_8025106
 *
 !*/
+!/.editorconfig
 !/.gitignore
 !/composer.json
 !/justuno_installation_guide_m1.txt
