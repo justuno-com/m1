@@ -51,10 +51,16 @@ final class Justuno_Jumagext_Orders {
 				,'IP' => ''
 				,'LineItems' => array_values(array_map(function(OI $i) {return [
 					'OrderId' => $i->getOrderId()
+					// 2019-10-31
+					// "Orders: «lineItem prices currently being returned in the orders feed are 0 always»":
+					// https://github.com/justuno-com/m1/issues/31
 					,'Price' => OIH::price($i)
-					,'ProductId' => $i->getProductId()
+					,'ProductId' => OIH::top($i)->getProductId()
 					,'TotalDiscount' => $i->getDiscountAmount()
-					,'VariantId' => ''
+					// 2019-10-31
+					// "Orders: «VariantID for lineItems is currently hardcoded as ''»":
+					// https://github.com/justuno-com/m1/issues/29
+					,'VariantId' => $i->getProductId()
 				];}, array_filter($oic->getItems(), function(OI $i) {return !$i->getChildrenItems();})))
 				,'OrderNumber' => $o['entity_id']
 				,'ShippingPrice' => $o['shipping_amount']

@@ -24,17 +24,18 @@ final class Justuno_Jumagext_OI {
 
 	/**
 	 * 2019-10-31
+	 * @used-by Justuno_Jumagext_Orders::p()
 	 * @used-by price()
 	 * @param OI $i
-	 * @return int
+	 * @return OI
 	 */
-	private static function qty(OI $i) {return intval($i->getQtyOrdered());}
+	static function top(OI $i) {return $i->getParentItem() ?: $i;}
 
 	/**
 	 * 2019-10-31
 	 * @used-by price()
 	 * @param OI $i
-	 * @return OI
+	 * @return int
 	 */
-	private static function top(OI $i) {return $i->getParentItem() ?: $i;}
+	private static function qty(OI $i) {return intval($i->getQtyOrdered());}
 }
