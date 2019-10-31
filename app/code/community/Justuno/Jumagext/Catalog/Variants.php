@@ -12,7 +12,10 @@ final class Justuno_Jumagext_Catalog_Variants {
 	 */
 	static function p(P $p) { /** @var array(array(string => mixed)) $r */
 		if ('configurable' !== $p->getTypeId()) {
-			$r = self::variant($p);
+			// 2019-30-31
+			// "Products: some Variants are objects instead of arrays of objects":
+			// https://github.com/justuno-com/m1/issues/32
+			$r = [self::variant($p)];
 		}
 		else {
 			$ct = $p->getTypeInstance(); /** @var Mage_Catalog_Model_Product_Type_Configurable $ct */
@@ -20,7 +23,10 @@ final class Justuno_Jumagext_Catalog_Variants {
 			// "A configurable product without any associated child products does not produce variants":
 			// https://github.com/justuno-com/m1/issues/26
 			if (!($children = $ct->getUsedProducts(null, $p))) { /** @var P $children */
-				$r = self::variant($p);
+				// 2019-30-31
+				// "Products: some Variants are objects instead of arrays of objects":
+				// https://github.com/justuno-com/m1/issues/32
+				$r = [self::variant($p)];
 			}
 			else {
 				$opts = array_column($ct->getConfigurableAttributesAsArray($p), 'attribute_code', 'id');
