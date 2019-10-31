@@ -6,7 +6,6 @@ use Mage_Sales_Model_Order as O;
 use Mage_Sales_Model_Order_Address as A;
 use Mage_Sales_Model_Order_Item as OI;
 use Mage_Sales_Model_Resource_Order_Collection as OC;
-use Mage_Sales_Model_Resource_Order_Item_Collection as OIC;
 // 2019-10-31
 final class Justuno_Jumagext_Orders {
 	/**
@@ -17,19 +16,7 @@ final class Justuno_Jumagext_Orders {
 		R::authorize();
 		$req = Mage::app()->getRequest(); /** @var Mage_Core_Controller_Request_Http $req */
 		$oc = new OC; /** @var OC $oc */
-		$dateFormat = 'Y-m-d H:i:s'; /** @var string $dateFormat */
-		if ($updatedSince = $req->getParam('updatedSince')) {
-		  $fromDate = date($dateFormat, strtotime($updatedSince));
-		  $toDate = date($dateFormat, strtotime('2035-01-01 23:59:59'));
-		  $timezone = $timezone =  Mage::getStoreConfig('general/locale/timezone');
-		  $fromDate = new DateTime($fromDate, new DateTimeZone($timezone));
-		  $fromDate = $fromDate->format('U');
-		  $fromDate = date($dateFormat,$fromDate);
-		  $toDate = new DateTime($toDate, new DateTimeZone($timezone));
-		  $toDate = $toDate->format('U');
-		  $toDate = date($dateFormat,$toDate);
-		  $oc->addFieldToFilter('updated_at', array('from' => $fromDate, 'to' => $toDate));
-		}
+		self::filterByDate($oc);
 		if ($sortOrders = $req->getParam('sortOrders')) {
 			$oc->getSelect()->order("$sortOrders ASC");
 		}
@@ -124,5 +111,27 @@ final class Justuno_Jumagext_Orders {
 			,'UpdatedAt' => $c['updated_at']
 			,'Zip' => $ba->getPostcode()
 		];
+	}
+
+	/**
+	 * 2019-10-31
+	 * @used-by p()
+	 * @param OC $oc
+	 */
+	private static function filterByDate(OC $oc) {
+		if ($since = Mage::app()->getRequest()->getParam('updatedSince')) { /** @var string $since */
+			/**
+			 * 2019-10-31
+			 * @param string $s
+			 * @return string
+			 */
+			$d = function($s) {
+				$f = 'Y-m-d H:i:s'; /** @var string $f */
+				$tz = Mage::getStoreConfig('general/locale/timezone'); /** @var string $tz */
+				$dt = new DateTime(date($f, strtotime($s)), new DateTimeZone($tz));	/** @var DateTime $dt */
+				return date($f, $dt->format('U'));
+			};
+			$oc->addFieldToFilter('updated_at', ['from' => $d($since), 'to' => $d('2035-01-01 23:59:59')]);
+		}
 	}
 }
