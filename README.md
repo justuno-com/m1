@@ -1,7 +1,7 @@
 [Justuno](https://www.justuno.com) module for Magento 1.
 
 ## How to install or update
-
+Execute in the Magento root directory:
 ```
 rm -rf app/code/community/Justuno ;
 rm -rf app/design/adminhtml/default/default/template/justuno ;
