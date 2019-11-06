@@ -15,5 +15,6 @@ curl -L -o $FILE https://github.com/$ORG/$REPO/archive/$VERSION.tar.gz ;
 tar xzvf $FILE ;
 rm -f $FILE ;
 cp -r $REPO-$VERSION/* . ;
-rm -rf $REPO-$VERSION 
+rm -rf $REPO-$VERSION ;
+rm -rf var/cache
 ```
