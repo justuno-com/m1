@@ -1,13 +1,19 @@
-Justuno Social
+[Justuno](https://www.justuno.com) module for Magento 1.
 
-Install Justuno Social Extension on Magento 1.9:
+## How to install or update
 
-  1. Log into your Magento Backend
-  2. Follow the menu System > MagentoConnect > MagentoConnect Manager
-  3. Enter your admin credentials
-  4. Go to the section "Direct Package File Upload"
-  5. Click on the button "Browse"
-  6. Choose the zip file (compressed)
-  7. Click on "Upload"
-  8. Then finish by clicking on "Install"
-  9. In the console at the bottom should show you the result. If a problem occurs, check that you have correct permissions to download files into the var/ folder of your Magento installation
+```
+rm -rf app/code/community/Justuno ;
+rm -rf app/design/adminhtml/default/default/template/justuno ;
+rm -rf app/design/frontend/base/default/layout/justuno ;
+rm -rf app/design/frontend/base/default/template/justuno  ;
+ORG=justuno-com ;
+REPO=m1 ;
+FILE=$REPO.tar.gz ;
+VERSION=$(curl -s https://api.github.com/repos/$ORG/$REPO/releases | grep tag_name | head -n 1 | cut -d '"' -f 4) ;
+curl -L -o $FILE https://github.com/$ORG/$REPO/archive/$VERSION.tar.gz ;
+tar xzvf $FILE ;
+rm -f $FILE ;
+cp -r $REPO-$VERSION/* . ;
+rm -rf $REPO-$VERSION 
+```
