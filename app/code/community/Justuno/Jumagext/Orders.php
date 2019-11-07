@@ -1,4 +1,5 @@
 <?php
+use Justuno_Jumagext_DB as DB;
 use Justuno_Jumagext_Filter as Filter;
 use Justuno_Jumagext_OI as OIH;
 use Justuno_Jumagext_Response as R;
@@ -75,13 +76,8 @@ final class Justuno_Jumagext_Orders {
 	 */
 	private static function customer(O $o) {
 		$c = new C; /** @var C $c */
-		$oc = new OC; /** @var OC $oc */
-		if (!$o->getCustomerId()) {
-			$oc->addFieldToFilter('customer_email', $o->getCustomerEmail());
-		}
-		else {
+		if ($o->getCustomerId()) {
 			$c->load($o->getCustomerId());
-			$oc->addFieldToFilter('customer_id', $o->getCustomerId());
 		}
 		$ba = $o->getBillingAddress(); /** @var A $ba */
 		return [
@@ -100,12 +96,31 @@ final class Justuno_Jumagext_Orders {
 			 */
 			,'ID' => $o->getCustomerId() ?: $o->getCustomerEmail()
 			,'LastName' => $o->getCustomerLastname()
-			,'OrdersCount' => $oc->count()
+			,'OrdersCount' => (int)self::stat($o, 'COUNT(*)')
 			,'ProvinceCode' => $ba->getRegionCode()
 			,'Tags' => ''
-			,'TotalSpend' => array_sum(array_map(function(O $o) {return $o->getGrandTotal();}, $oc->getItems()))
+			,'TotalSpend' => (float)self::stat($o, 'SUM(grand_total)')
 			,'UpdatedAt' => $c['updated_at']
 			,'Zip' => $ba->getPostcode()
 		];
+	}
+
+	/**
+	 * 2019-11-07
+	 * 2019-11-07
+	 * 1) «Allowed memory size exausted» on `'OrdersCount' => $oc->count()`:
+	 * https://github.com/justuno-com/m1/issues/36
+	 * 2) I have replaced the customer collection with direct SQL queries.
+	 * @used-by ordersCount()
+	 * @used-by totalSpent()
+	 * @param O $o
+	 * @param string $v
+	 * @return string
+	 */
+	private static function stat(O $o, $v) {
+		$k = $o->getCustomerId() ? 'customer_id' : 'customer_email'; /** @var string $k */
+		return DB::conn()->fetchOne(
+			DB::select()->from(DB::t('sales_flat_order'), ['v' => $v])->where("? = $k", $o[$k])
+		);
 	}
 }
