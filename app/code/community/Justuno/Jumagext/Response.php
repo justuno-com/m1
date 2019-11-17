@@ -1,5 +1,4 @@
 <?php
-use Varien_Data_Collection_Db as C;
 // 2019-10-30
 final class Justuno_Jumagext_Response {
 	/**
