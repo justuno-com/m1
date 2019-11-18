@@ -2,7 +2,7 @@
 use Mage_Catalog_Model_Resource_Product_Collection as PC;
 use Mage_Sales_Model_Resource_Order_Collection as OC;
 use Varien_Data_Collection_Db as C;
-// 2019-10-10
+// 2019-10-31
 final class Justuno_Jumagext_Filter {
 	/**
 	 * 2019-10-31
