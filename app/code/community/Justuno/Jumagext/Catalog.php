@@ -32,7 +32,7 @@ final class Justuno_Jumagext_Catalog {
 			V::VISIBILITY_BOTH, V::VISIBILITY_IN_CATALOG, V::VISIBILITY_IN_SEARCH
 		]]);
 		Filter::p($pc);
-		$brand = Mage::getStoreConfig('justuno/justuno_settings/brand_attributure');
+		$brand = Mage::getStoreConfig('justuno/justuno_settings/brand_attributure'); /** @var string $brand */
 		R::res(array_values(array_map(function(P $p) use($brand) { /** @var array(string => mixed) $r */
 			$rs = new RS; /** @var RS $rs */
 			$rs->load($p->getId());
