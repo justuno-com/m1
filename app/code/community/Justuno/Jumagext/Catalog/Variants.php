@@ -1,6 +1,5 @@
 <?php
 use Mage_Catalog_Model_Product as P;
-use Mage_Catalog_Model_Product_Status as Status;
 use Mage_CatalogInventory_Model_Stock_Item as SI;
 // 2019-10-30
 final class Justuno_Jumagext_Catalog_Variants {
