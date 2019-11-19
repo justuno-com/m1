@@ -87,8 +87,7 @@ final class Justuno_Jumagext_Catalog_Variants {
 		 * We need these sent back starting at OptionType1, OptionType2»:
 		 * https://github.com/justuno-com/m1/issues/14
 		 */
-		foreach (array_values($opts) as $id => $code) {
-			$id++;
+		foreach (array_values($opts) as $id => $code) {$id++;
 			$r["Option$id"] = $p->getAttributeText($code);
 		}
 		return $r;
