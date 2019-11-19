@@ -5,7 +5,7 @@ use Mage_CatalogInventory_Model_Stock_Item as SI;
 final class Justuno_Jumagext_Catalog_Variants {
 	/**
 	 * 2019-10-30
-	 * @used-by \Justuno_Jumagext_ResponseController::catalogAction
+	 * @used-by \Justuno_Jumagext_ResponseController::catalogAction()
 	 * @param P $p
 	 * @return array(array(string => mixed))
 	 */
@@ -39,6 +39,7 @@ final class Justuno_Jumagext_Catalog_Variants {
 
 	/**
 	 * 2019-10-30
+	 * @used-by p()
 	 * @param P $p
 	 * @param P|null $parent [optional]
 	 * @param array(int => string) $opts [optional]
