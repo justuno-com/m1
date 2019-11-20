@@ -43,8 +43,7 @@ final class Justuno_Jumagext_Response {
 
 	/**
 	 * 2019-10-30
-	 * «if a property is null or an empty string do not send it back»:
-	 * https://github.com/justuno-com/m1/issues/9
+	 * «if a property is null or an empty string do not send it back»: https://github.com/justuno-com/m1/issues/9
 	 * @used-by filter()
 	 * @used-by res()
 	 * @param array(string => mixed) $a
