@@ -31,7 +31,6 @@ final class Justuno_Jumagext_Catalog {
 		$pc->addAttributeToFilter('visibility', ['in' => [
 			V::VISIBILITY_BOTH, V::VISIBILITY_IN_CATALOG, V::VISIBILITY_IN_SEARCH
 		]]);
-		Filter::p($pc);
 		$brand = Mage::getStoreConfig('justuno/justuno_settings/brand_attributure'); /** @var string $brand */
 		R::res(array_values(array_map(function(P $p) use($brand) { /** @var array(string => mixed) $r */
 			$rs = new RS; /** @var RS $rs */
@@ -121,7 +120,7 @@ final class Justuno_Jumagext_Catalog {
 			 * https://www.upwork.com/messages/rooms/room_e6b2d182b68bdb5e9bf343521534b1b6/story_4e29dacff68f2d918eff2f28bb3d256c
 			 */
 			return $r + ['BrandId' => $brand, 'BrandName' => !$brand ? null : ($p->getAttributeText($brand) ?: null)];
-		}, $pc->getItems())));
+		}, Filter::p($pc)->getItems())));
 	}
 
 	/**

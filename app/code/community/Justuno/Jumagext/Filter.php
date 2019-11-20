@@ -8,21 +8,23 @@ final class Justuno_Jumagext_Filter {
 	 * 2019-10-31
 	 * @used-by Justuno_Jumagext_Catalog::p()
 	 * @used-by Justuno_Jumagext_Orders::p()
-	 * @param C|OC|PC $c
+	 * @param C|OC|PC $r
+	 * @return OC|PC
 	 */
-	static function p(C $c) {
-		self::byDate($c);
+	static function p(C $r) {
+		self::byDate($r);
 		$req = Mage::app()->getRequest(); /** @var Mage_Core_Controller_Request_Http $req */
 		/** @var string $dir */ /** @var string $suffix */
-		list($dir, $suffix) = $c instanceof PC ? ['DESC', 'Products'] : ['ASC', 'Orders'];
+		list($dir, $suffix) = $r instanceof PC ? ['DESC', 'Products'] : ['ASC', 'Orders'];
 		if ($field = $req->getParam("sort$suffix")) { /** @var string $field */
-			$c->getSelect()->order("$field $dir");
+			$r->getSelect()->order("$field $dir");
 		}
 		// 2019-11-06
 		// Fix the `offset` argument of the `Varien_Db_Select::limit()` call
 		// from the `Justuno_Jumagext_Filter::p()` method: https://github.com/justuno-com/m1/issues/34
 		$size = (int)$req->getParam('pageSize', 10); /** @var int $size */
-		$c->getSelect()->limit($size, $size * ((int)$req->getParam('currentPage', 1) - 1));
+		$r->getSelect()->limit($size, $size * ((int)$req->getParam('currentPage', 1) - 1));
+		return $r;
 	}
 
 	/**
