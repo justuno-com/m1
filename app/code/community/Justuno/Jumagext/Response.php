@@ -10,7 +10,7 @@ final class Justuno_Jumagext_Response {
 	 */
 	static function p(\Closure $f) {/** @var array(string => mixed) $r */
 		try {self::authorize(); $r = $f();}
-		catch (\Exception $e) {$r = ['message' => $e->getMessage(), 'response' => null];}
+		catch (\Exception $e) {$r = ['message' => $e->getMessage()];}
 		self::res($r);
 	}
 
