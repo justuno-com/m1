@@ -42,7 +42,7 @@ final class Justuno_Jumagext_Orders {
 			// https://github.com/justuno-com/m1/issues/31
 			,'Price' => OIH::price($i)
 			,'ProductId' => OIH::top($i)->getProductId()
-			,'TotalDiscount' => (float)$i->getDiscountAmount()
+			,'TotalDiscount' => (float)OIH::top($i)->getDiscountAmount()
 			// 2019-10-31
 			// Orders: «VariantID for lineItems is currently hardcoded as ''»:
 			// https://github.com/justuno-com/m1/issues/29
