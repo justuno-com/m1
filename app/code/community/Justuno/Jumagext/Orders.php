@@ -14,7 +14,7 @@ final class Justuno_Jumagext_Orders {
 	 * 2019-10-31
 	 * @used-by Justuno_Jumagext_ResponseController::ordersAction()
 	 */
-	static function p() {R::authorize(); R::res(array_values(array_map(function(O $o) {return [
+	static function p() {R::p(function() {return array_values(array_map(function(O $o) {return [
 		'CountryCode' => $o->getBillingAddress()->getCountryId()
 		,'CreatedAt' => $o->getCreatedAt()
 		,'Currency' => $o->getOrderCurrencyCode()
@@ -57,7 +57,7 @@ final class Justuno_Jumagext_Orders {
 		,'TotalPrice' => (float)$o->getGrandTotal()
 		,'TotalTax' => (float)$o->getTaxAmount()
 		,'UpdatedAt' => $o->getUpdatedAt()
-	];}, Filter::p(new OC)->getItems())));}
+	];}, Filter::p(new OC)->getItems()));});;}
 
 	/**
 	 * 2019-10-27

@@ -6,8 +6,7 @@ final class Justuno_Jumagext_CatalogFirst {
 	 * 2019-10-31
 	 * @used-by Justuno_Jumagext_ResponseController::catalogFirstAction()
 	 */
-	static function p() {
-		R::authorize();
+	static function p() {R::p(function() {
 		$req = Mage::app()->getRequest(); /** @var Mage_Core_Controller_Request_Http $req */
 		$consumer = new Zend_Oauth_Consumer([
 			'accessTokenUrl' => R::url('oauth/token')
@@ -25,8 +24,8 @@ final class Justuno_Jumagext_CatalogFirst {
 			,'pageSize' => $req->getParam('pageSize')
 			,'sortOrders' => $req->getParam('sortOrders')
 		])));
-		print_r($c->request()->getBody());
-	}
+		return json_decode($c->request()->getBody());
+	});}
 
 	/**
 	 * 2019-10-27

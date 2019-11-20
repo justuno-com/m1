@@ -15,8 +15,7 @@ final class Justuno_Jumagext_Catalog {
 	 * 2019-10-31
 	 * @used-by Justuno_Jumagext_ResponseController::catalogAction()
 	 */
-	static function p() {
-		R::authorize();
+	static function p() {R::p(function() {
 		$pc = new PC; /** @var PC $pc */
 		$pc->addAttributeToSelect('*');
 		/**
@@ -32,7 +31,7 @@ final class Justuno_Jumagext_Catalog {
 			V::VISIBILITY_BOTH, V::VISIBILITY_IN_CATALOG, V::VISIBILITY_IN_SEARCH
 		]]);
 		$brand = Mage::getStoreConfig('justuno/justuno_settings/brand_attributure'); /** @var string $brand */
-		R::res(array_values(array_map(function(P $p) use($brand) { /** @var array(string => mixed) $r */
+		return array_values(array_map(function(P $p) use($brand) { /** @var array(string => mixed) $r */
 			$rs = new RS; /** @var RS $rs */
 			$rs->load($p->getId());
 			$cc = $p->getCategoryCollection(); /** @var CC $cc */
@@ -120,8 +119,8 @@ final class Justuno_Jumagext_Catalog {
 			 * https://www.upwork.com/messages/rooms/room_e6b2d182b68bdb5e9bf343521534b1b6/story_4e29dacff68f2d918eff2f28bb3d256c
 			 */
 			return $r + ['BrandId' => $brand, 'BrandName' => !$brand ? null : ($p->getAttributeText($brand) ?: null)];
-		}, Filter::p($pc)->getItems())));
-	}
+		}, Filter::p($pc)->getItems()));
+	});}
 
 	/**
 	 * 2019-10-27
