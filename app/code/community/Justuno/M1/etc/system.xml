@@ -53,7 +53,7 @@
 							<sort_order>13</sort_order>
 						</jutoken>
 						<jubutton>
-							<frontend_model>Justuno_M1_Block_Adminhtml_System_Config_Form_Button</frontend_model>
+							<frontend_model>Justuno_M1_Block_GenerateToken</frontend_model>
 							<frontend_type>button</frontend_type>
 							<show_in_default>1</show_in_default>
 							<show_in_store>1</show_in_store>

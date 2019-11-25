@@ -3,7 +3,7 @@ use Mage_Adminhtml_Block_System_Config_Form_Field as _P;
 use Mage_Adminhtml_Block_Widget_Button as B;
 use Varien_Data_Form_Element_Abstract as E;
 // 2019-11-26
-final class Justuno_M1_Block_Adminhtml_System_Config_Form_Button extends _P {
+final class Justuno_M1_Block_GenerateToken extends _P {
 	/**
 	 * 2019-11-26
 	 * @override
