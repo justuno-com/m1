@@ -1,13 +1,11 @@
 <?php 
-class Justuno_M1_Block_Adminhtml_System_Config_Form_Button extends Mage_Adminhtml_Block_System_Config_Form_Field
-{
+class Justuno_M1_Block_Adminhtml_System_Config_Form_Button extends Mage_Adminhtml_Block_System_Config_Form_Field {
     /*
      * Set template
      */
-    protected function _construct()
-    {
+    protected function _construct() {
         parent::_construct();
-        $this->setTemplate('justuno/system/config/button.phtml'); 
+        $this->setTemplate('justuno/button.phtml');
     }
     /**
      * Return element html
@@ -15,18 +13,14 @@ class Justuno_M1_Block_Adminhtml_System_Config_Form_Button extends Mage_Adminhtm
      * @param  Varien_Data_Form_Element_Abstract $element
      * @return string
      */
-    protected function _getElementHtml(Varien_Data_Form_Element_Abstract $element)
-    {
-        return $this->_toHtml();
-    }
+    protected function _getElementHtml(Varien_Data_Form_Element_Abstract $element) {return $this->_toHtml();}
     
     /**
      * Generate button html
      *
      * @return string
      */
-    function getButtonHtml()
-    {
+    function getButtonHtml() {
         $button = $this->getLayout()->createBlock('adminhtml/widget_button')
             ->setData( array(
             'id'        => 'justuno_button',
@@ -36,4 +30,3 @@ class Justuno_M1_Block_Adminhtml_System_Config_Form_Button extends Mage_Adminhtm
         return $button->toHtml();
     }
 }
-?>
