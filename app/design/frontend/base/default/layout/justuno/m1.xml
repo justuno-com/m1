@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<layout version="0.1.0">
+<?xml version='1.0' encoding='UTF-8'?>
+<layout version='0.1.0'>
     <default>
-        <reference name="head">
-            <block type="core/template" name="justuno" template="justuno/m1/embed.phtml" />
+        <reference name='head'>
+            <block type='core/template' name='justuno' template='justuno/m1.phtml' />
         </reference>
     </default>
 </layout>
