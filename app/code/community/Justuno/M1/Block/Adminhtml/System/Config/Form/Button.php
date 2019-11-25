@@ -1,5 +1,6 @@
 <?php
 use Mage_Adminhtml_Block_System_Config_Form_Field as _P;
+use Mage_Adminhtml_Block_Widget_Button as B;
 use Varien_Data_Form_Element_Abstract as E;
 // 2019-11-26
 final class Justuno_M1_Block_Adminhtml_System_Config_Form_Button extends _P {
@@ -26,13 +27,9 @@ final class Justuno_M1_Block_Adminhtml_System_Config_Form_Button extends _P {
      * @used-by app/design/adminhtml/default/default/template/justuno/button.phtml
      * @return string
      */
-	protected function getButtonHtml() {
-        $r = $this->getLayout()->createBlock('adminhtml/widget_button')
-            ->setData( array(
-            'id'        => 'justuno_button',
-            'label'     => $this->helper('adminhtml')->__('Generate New Token'),
-            'onclick'   => 'javascript:generateToken(); return false;'
-        )); /** @var Mage_Adminhtml_Block_Widget_Button $r */
-        return $r->toHtml();
-    }
+	protected function getButtonHtml() {return $this->getLayout()->createBlock(B::class, '', [
+		'id' => 'justuno_button',
+		'label' => $this->helper('adminhtml')->__('Generate New Token'),
+		'onclick' => 'javascript:generateToken(); return false;'
+	])->toHtml();}
 }
