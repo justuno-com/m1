@@ -1,32 +1,38 @@
-<?php 
-class Justuno_M1_Block_Adminhtml_System_Config_Form_Button extends Mage_Adminhtml_Block_System_Config_Form_Field {
-    /*
-     * Set template
-     */
-    protected function _construct() {
-        parent::_construct();
-        $this->setTemplate('justuno/button.phtml');
-    }
+<?php
+use Mage_Adminhtml_Block_System_Config_Form_Field as _P;
+use Varien_Data_Form_Element_Abstract as E;
+// 2019-11-26
+final class Justuno_M1_Block_Adminhtml_System_Config_Form_Button extends _P {
+	/**
+	 * 2019-11-26
+	 * @override
+	 * @see Mage_Core_Block_Template::_construct()
+	 * @used-by Varien_Object::__construct()
+	 */
+    protected function _construct() {parent::_construct(); $this->setTemplate('justuno/button.phtml');}
+
     /**
-     * Return element html
-     *
-     * @param  Varien_Data_Form_Element_Abstract $element
+	 * 2019-11-26
+	 * @override
+	 * @see _P::_getElementHtml()
+	 * @used-by Mage_Adminhtml_Block_System_Config_Form_Field::render()
+     * @param E $e
      * @return string
      */
-    protected function _getElementHtml(Varien_Data_Form_Element_Abstract $element) {return $this->_toHtml();}
+    protected function _getElementHtml(E $e) {return $this->_toHtml();}
     
     /**
-     * Generate button html
-     *
+	 * 2019-11-26
+     * @used-by app/design/adminhtml/default/default/template/justuno/button.phtml
      * @return string
      */
-    function getButtonHtml() {
-        $button = $this->getLayout()->createBlock('adminhtml/widget_button')
+	protected function getButtonHtml() {
+        $r = $this->getLayout()->createBlock('adminhtml/widget_button')
             ->setData( array(
             'id'        => 'justuno_button',
             'label'     => $this->helper('adminhtml')->__('Generate New Token'),
             'onclick'   => 'javascript:generateToken(); return false;'
-        ) );
-        return $button->toHtml();
+        )); /** @var Mage_Adminhtml_Block_Widget_Button $r */
+        return $r->toHtml();
     }
 }
