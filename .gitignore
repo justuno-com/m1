@@ -13,4 +13,4 @@
 !app/design/adminhtml/default/default/template/justuno/**/*
 !app/design/frontend/base/default/layout/justuno/**/*
 !app/design/frontend/base/default/template/justuno/**/*
-!app/etc/modules/Justuno_Jumagext.xml
+!app/etc/modules/Justuno_M1.xml

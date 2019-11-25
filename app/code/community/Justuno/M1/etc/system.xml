@@ -1,0 +1,68 @@
+<?xml version='1.0'?>
+<config>
+    <sections>
+        <justuno>
+            <label>Justuno</label>
+            <tab>general</tab>
+            <sort_order>999</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <justuno_settings>
+                    <label>Options</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <accid>
+                            <label>ACCID (Unique Justuno ACCOUNT ID)</label>
+                            <comment>ACCID is found in the admin settings of your Justuno account in your embed section (XXXXXXXX-XXXX-XXXX-XXXXXXX)</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </accid>
+                        <brand_attributure translate='label'>
+                            <label>Choose Brand Attribute </label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>11</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <source_model>Justuno_M1_Model_Config_Mylist</source_model>
+                        </brand_attributure>
+                        <juajaxurl>
+                            <label>AJAX URL (OPTIONAL if your cart has modded request URLs)</label>
+                            <comment>This is any uniquely identifiable URL segment of one which is called upon when an item is being added to the cart via AJAX (e.g. /addToCart, ?ajaxUpdate, etc.)</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>12</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </juajaxurl>
+                        <jutoken>
+                            <label>Token Key</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>13</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </jutoken>
+                        <jubutton>
+                            <frontend_type>button</frontend_type>
+                            <frontend_model>Justuno_M1_Block_Adminhtml_System_Config_Form_Button</frontend_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </jubutton>
+                    </fields>
+                </justuno_settings>
+            </groups>
+        </justuno>
+    </sections>
+</config>

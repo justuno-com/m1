@@ -3,6 +3,7 @@
 ## How to install or upgrade
 Execute in the Magento root directory:
 ```
+rm -f app/etc/modules/Justuno_Jumagext.xml ;
 rm -rf app/code/community/Justuno ;
 rm -rf app/design/adminhtml/default/default/template/justuno ;
 rm -rf app/design/frontend/base/default/layout/justuno ;
