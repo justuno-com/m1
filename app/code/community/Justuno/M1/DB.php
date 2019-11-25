@@ -1,17 +1,17 @@
 <?php
 use Mage_Core_Model_Resource as RC;
-use Varien_Db_Adapter_Interface as IAdapter;
-use Varien_Db_Adapter_Pdo_Mysql as Mysql;
+use Varien_Db_Adapter_Pdo_Mysql as MySQL;
 use Varien_Db_Select as Select;
 // 2019-11-07
 final class Justuno_M1_DB {
 	/**
 	 * 2019-11-07
-	 * @used-by Justuno_M1_Orders::stat()
 	 * @used-by select()
-	 * @return IAdapter|Mysql
+	 * @used-by Justuno_M1_Orders::stat()
+	 * @used-by app/code/community/Justuno/M1/sql/Justuno_M1/mysql4-install-1.4.3.php
+	 * @return MySQL
 	 */
-	static function conn() {return self::res()->getConnection('read');}
+	static function conn() {return self::res()->getConnection('write');}
 
 	/**
 	 * 2019-11-07
@@ -23,6 +23,7 @@ final class Justuno_M1_DB {
 	/**
 	 * 2019-11-07
 	 * @used-by Justuno_M1_Orders::stat()
+	 * @used-by app/code/community/Justuno/M1/sql/Justuno_M1/mysql4-install-1.4.3.php
 	 * @param string $s
 	 * @return string
 	 */

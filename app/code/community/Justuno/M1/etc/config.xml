@@ -4,7 +4,7 @@
 		<Justuno_M1>
 			<author>Dmitry Fedyuk</author>
 			<url>https://www.upwork.com/fl/mage2pro</url>
-			<version>1.4.2</version>
+			<version>1.4.3</version>
 		</Justuno_M1>
 	</modules>
 	<frontend>
@@ -38,7 +38,10 @@ and it's still false and shows the actual inventory»: https://github.com/justun
 		</routers>
 	</frontend>
 	<global>
-		<models><Justuno_M1><class>Justuno_M1_Model</class></Justuno_M1></models>
-		<helpers><Justuno_M1><class>Justuno_M1_Helper</class></Justuno_M1></helpers>
+<!-- 2019-11-26
+@used-by Mage_Log_Model_Visitor::isModuleIgnored()
+https://github.com/OpenMage/magento-mirror/blob/1.9.4.3/app/code/core/Mage/Log/Model/Visitor.php#L333-L344 -->
+		<ignoredModules><entities><Justuno_M1/></entities></ignoredModules>
+		<resources><Justuno_M1><setup><module>Justuno_M1</module></setup></Justuno_M1></resources>
 	</global>
 </config>
