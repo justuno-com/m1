@@ -1,5 +1,6 @@
 <?php
 use Justuno_M1_Settings as S;
+use Mage_Customer_Model_Session as SCustomer;
 ?><script>
 	/** @type {string} */ var merchantId = '<?= S::id() ?>';
 	// 2020-01-14 «Validating a GUID in JavaScript» https://stackoverflow.com/a/24573236
@@ -48,13 +49,6 @@ use Justuno_M1_Settings as S;
 if ($url = S::ajaxUrl()) { /** @var string $url */
 	?><script>window.ju_MageAJAX = '<?= $url ?>';</script><?php
 }
-if (Mage::getSingleton('customer/session')->isLoggedIn()) {
-	$customerData = Mage::getSingleton('customer/session')->getCustomer();
-	$customerID = $customerData->getId();
-}
-else {
-	$customerID = null;
-}
 $pageIdentifier = Mage::app()->getFrontController()->getAction()->getFullActionName();
 if (Mage::registry('current_product')) {
 	$product = Mage::registry('current_product');
@@ -64,12 +58,14 @@ if (Mage::registry('current_product')) {
 else {
 	list($productid, $productstockqty) = [null, null];
 }
+// 2020-01-14 «How to get Magento customer ID» https://stackoverflow.com/a/17236128
+$sCustomer = Mage::getSingleton('customer/session'); /** @var SCustomer $sCustomer */
 ?>
 <script>
 	window.ju_MageKeys = {
 		PageID: '<?= $pageIdentifier ?>',
 		ProductID: '<?= $productid ?>',
-		CustomerID: '<?= $customerID ?>',
+		CustomerID: '<?= $sCustomer->getId() ?>',
 		StockQty: '<?= $productstockqty ?>'
 	};
 </script>
