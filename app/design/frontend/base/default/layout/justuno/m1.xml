@@ -1,8 +1,23 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <layout version='0.1.0'>
-    <default>
-        <reference name='head'>
-            <block type='core/template' name='justuno' template='justuno/m1.phtml' />
-        </reference>
-    </default>
+	<default>
+		<reference name='head'>
+<!-- 2020-01-14
+This block is never cached because blocks in Magento 1 are not cacheable by default:
+@see Mage_Core_Block_Abstract::_loadCache():
+	if (is_null($this->getCacheLifetime()) || !$this->_getApp()->useCache(self::CACHE_GROUP)) {
+		return false;
+	}
+https://github.com/OpenMage/magento-mirror/blob/1.9.4.3/app/code/core/Mage/Core/Block/Abstract.php#L1413-L1415
+@see Mage_Core_Block_Abstract::getCacheLifetime():
+	public function getCacheLifetime() {
+		if (!$this->hasData('cache_lifetime')) {
+			return null;
+		}
+		return $this->getData('cache_lifetime');
+	}
+https://github.com/OpenMage/magento-mirror/blob/1.9.4.3/app/code/core/Mage/Core/Block/Abstract.php#L1383-L1394 -->
+			<block name='justuno' template='justuno/m1.phtml' type='core/template'/>
+		</reference>
+	</default>
 </layout>
