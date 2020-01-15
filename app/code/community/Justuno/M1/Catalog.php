@@ -1,6 +1,7 @@
 <?php
 use Justuno_M1_Filter as Filter;
 use Justuno_M1_Response as R;
+use Justuno_M1_Settings as S;
 use Mage_Catalog_Model_Category as C;
 use Mage_Catalog_Model_Product as P;
 use Mage_Catalog_Model_Product_Visibility as V;
@@ -30,7 +31,7 @@ final class Justuno_M1_Catalog {
 		$pc->addAttributeToFilter('visibility', ['in' => [
 			V::VISIBILITY_BOTH, V::VISIBILITY_IN_CATALOG, V::VISIBILITY_IN_SEARCH
 		]]);
-		$brand = Mage::getStoreConfig('justuno/justuno_settings/brand_attributure'); /** @var string $brand */
+		$brand = S::brand(); /** @var string $brand */
 		return array_values(array_map(function(P $p) use($brand) { /** @var array(string => mixed) $r */
 			$rs = new RS; /** @var RS $rs */
 			$rs->load($p->getId());

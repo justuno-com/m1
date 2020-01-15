@@ -1,13 +1,12 @@
 <?php
-$subject = Mage::getStoreConfig('justuno/justuno_settings/accid', Mage::app()->getStore());
-$juajaxurl = Mage::getStoreConfig('justuno/justuno_settings/juajaxurl', Mage::app()->getStore());
+use Justuno_M1_Settings as S;
+$merchantID = S::id(); /** @var string $merchantID */
 $pattern = "/^[{]?[0-9a-fA-F]{8}[-]?([0-9a-fA-F]{4}[-]?){3}[0-9a-fA-F]{12}[}]?$/";
-if (preg_match($pattern, $subject)) { ?>
+if (preg_match($pattern, $merchantID)) { ?>
 	<script>
-		window.ju_num='<?= $subject ?>';
-		window.ju_ajaxCartURL = '<?= $this->getUrl("jumagext/index/getcart")?>';
-		if (location.href.includes('checkout') && location.href.includes('success'))
-		{
+		window.ju_num='<?= $merchantID ?>';
+		window.ju_ajaxCartURL = '<?= $this->getUrl('jumagext/index/getcart')?>';
+		if (location.href.includes('checkout') && location.href.includes('success')) {
 		   <?php
 				$orderID = Mage::getSingleton('checkout/session')->getLastOrderId();
 				$order = Mage::getModel('sales/order')->load($orderID);
@@ -20,7 +19,8 @@ if (preg_match($pattern, $subject)) { ?>
 				shipping: '<?= $order->getShippingAmount() ?>',
 				currency:'<?= Mage::app()->getStore()->getCurrentCurrencyCode() ?>'
 			};
-		} else {
+		}
+		else {
 		  window.ju_cart_obj = {
 				total: '<?= Mage::helper('checkout/cart')->getQuote()->getGrandTotal() ?>',
 				subtotal: '<?= Mage::helper('checkout/cart')->getQuote()->getSubtotal() ?>',
@@ -45,8 +45,8 @@ if (preg_match($pattern, $subject)) { ?>
 <?php } else { ?>
 	<script>console.log('JU_ERROR: Justuno Account ID (ACCID) Was Not Set Correctly...');</script>
 <?php }
-if ($juajaxurl) {
-	?><script>window.ju_MageAJAX = '<?= $juajaxurl ?>';</script><?php
+if ($url = S::ajaxUrl()) { /** @var string $url */
+	?><script>window.ju_MageAJAX = '<?= $url ?>';</script><?php
 }
 if (Mage::getSingleton('customer/session')->isLoggedIn()) {
 	$customerData = Mage::getSingleton('customer/session')->getCustomer();

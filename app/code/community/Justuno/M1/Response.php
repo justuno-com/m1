@@ -1,4 +1,5 @@
 <?php
+use Justuno_M1_Settings as S;
 // 2019-10-30
 final class Justuno_M1_Response {
 	/**
@@ -27,12 +28,10 @@ final class Justuno_M1_Response {
 	 */
 	private static function authorize() {
 		if (!isset($_SERVER['DF_DEVELOPER'])) {
-			$apitoken = Mage::getStoreConfig('justuno/justuno_settings/jutoken');
-			$req_token = Mage::app()->getRequest()->getHeader('Authorization');
-			if (empty($req_token)) {
+			if (!($t = Mage::app()->getRequest()->getHeader('Authorization'))) {
 				die('Token missing!');
 			}
-			if ($req_token !== $apitoken) {
+			if ($t !== S::token()) {
 				die('Token mismatched!');
 			}
 		}
