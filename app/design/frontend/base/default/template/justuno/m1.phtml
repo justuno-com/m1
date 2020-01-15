@@ -2,7 +2,10 @@
 // 2020-01-15 This block is never cached:
 // https://github.com/justuno-com/m1/blob/1.4.4/app/design/frontend/base/default/layout/justuno/m1.xml#L5-L20
 use Justuno_M1_Settings as S;
+use Mage_Checkout_Model_Session as SCheckout;
 use Mage_Customer_Model_Session as SCustomer;
+use Mage_Sales_Model_Order as O;
+use Mage_Sales_Model_Quote as Q;
 ?><script>
 	window.ju_num = '<?= S::id() ?>';
 	// 2020-01-15 «Validating a GUID in JavaScript» https://stackoverflow.com/a/24573236
@@ -12,29 +15,36 @@ use Mage_Customer_Model_Session as SCustomer;
 	}
 	else {
 		window.ju_ajaxCartURL = '<?= $this->getUrl('jumagext/index/getcart')?>';
-		if (location.href.includes('checkout') && location.href.includes('success')) {
-		   <?php
-				$orderID = Mage::getSingleton('checkout/session')->getLastOrderId();
-				$order = Mage::getModel('sales/order')->load($orderID);
-			?>
-			window.ju_order_id = '<?= $orderID ?>';
-			window.ju_order_obj = {
-				total: '<?= $order->getGrandTotal() ?>',
-				subtotal: '<?= $order->getSubtotal() ?>',
-				tax: '<?= $order->getTaxAmount() ?>',
-				shipping: '<?= $order->getShippingAmount() ?>',
-				currency:'<?= Mage::app()->getStore()->getCurrentCurrencyCode() ?>'
-			};
-		}
-		else {
-		  window.ju_cart_obj = {
-				total: '<?= Mage::helper('checkout/cart')->getQuote()->getGrandTotal() ?>',
-				subtotal: '<?= Mage::helper('checkout/cart')->getQuote()->getSubtotal() ?>',
-				tax: '<?= Mage::helper('checkout/cart')->getQuote()->getTaxAmount() ?>',
-				shipping: '<?= Mage::helper('checkout/cart')->getQuote()->getShippingAmount() ?>',
-				currency: '<?= Mage::app()->getStore()->getCurrentCurrencyCode() ?>'
-			};
-		}
+		<?php
+			$currency = Mage::app()->getStore()->getCurrentCurrencyCode(); /** @var string $currency */
+			$sCheckout = Mage::getSingleton('checkout/session'); /** @var SCheckout $sCheckout */
+			if (in_array('checkout_onepage_success', Mage::app()->getLayout()->getUpdate()->getHandles())) {
+				$oid = $sCheckout->getLastOrderId(); /** @var int $oid */
+				$o = Mage::getModel('sales/order')->load($oid); /** @var O $o */
+				?>
+				window.ju_order_id = <?= $oid ?>;
+				window.ju_order_obj = {
+					currency:'<?= $currency ?>'
+					,shipping: '<?= $o->getShippingAmount() ?>'
+					,subtotal: '<?= $o->getSubtotal() ?>'
+					,tax: '<?= $o->getTaxAmount() ?>'
+					,total: '<?= $o->getGrandTotal() ?>'
+				};
+				<?php
+			}
+			else {
+				$q = $sCheckout->getQuote(); /** @var Q $q */
+				?>
+				window.ju_cart_obj = {
+					currency: '<?= $currency ?>'
+					,shipping: '<?= $q->getShippingAmount() ?>'
+					,subtotal: '<?= $q->getSubtotal() ?>'
+					,tax: '<?= $q->getTaxAmount() ?>'
+					,total: '<?= $q->getGrandTotal() ?>'
+				};
+				<?php
+			}
+		?>
 		window.asset_host = '//cdn.justuno.com/';
 		(function (i, s, o, g, r, a, m) {
 			i[r] = i[r] || function () {
@@ -65,9 +75,9 @@ $sCustomer = Mage::getSingleton('customer/session'); /** @var SCustomer $sCustom
 ?>
 <script>
 	window.ju_MageKeys = {
-		PageID: '<?= $pageIdentifier ?>',
-		ProductID: '<?= $productid ?>',
-		CustomerID: '<?= $sCustomer->getId() ?>',
-		StockQty: '<?= $productstockqty ?>'
+		CustomerID: '<?= $sCustomer->getId() ?>'
+		,PageID: '<?= $pageIdentifier ?>'
+		,ProductID: '<?= $productid ?>'
+		,StockQty: '<?= $productstockqty ?>'
 	};
 </script>
