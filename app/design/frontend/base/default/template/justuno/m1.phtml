@@ -1,10 +1,13 @@
 <?php
 use Justuno_M1_Settings as S;
-$merchantID = S::id(); /** @var string $merchantID */
-$pattern = "/^[{]?[0-9a-fA-F]{8}[-]?([0-9a-fA-F]{4}[-]?){3}[0-9a-fA-F]{12}[}]?$/";
-if (preg_match($pattern, $merchantID)) { ?>
-	<script>
-		window.ju_num='<?= $merchantID ?>';
+?><script>
+	/** @type {string} */ var merchantId = '<?= S::id() ?>';
+	// 2020-01-14 «Validating a GUID in JavaScript» https://stackoverflow.com/a/24573236
+	if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(merchantId)) {
+		console.log('JU_ERROR: Justuno Account ID (ACCID) Was Not Set Correctly...');
+	}
+	else {
+		window.ju_num = merchantId;
 		window.ju_ajaxCartURL = '<?= $this->getUrl('jumagext/index/getcart')?>';
 		if (location.href.includes('checkout') && location.href.includes('success')) {
 		   <?php
@@ -39,12 +42,9 @@ if (preg_match($pattern, $merchantID)) { ?>
 			a.async = 1;
 			a.src = g;
 			m.parentNode.insertBefore(a, m);
-			// eslint-disable-next-line no-undef
 		})(window, document, 'script', asset_host + 'vck-m1.js', 'juapp');
-	</script>
-<?php } else { ?>
-	<script>console.log('JU_ERROR: Justuno Account ID (ACCID) Was Not Set Correctly...');</script>
-<?php }
+	}
+</script><?php
 if ($url = S::ajaxUrl()) { /** @var string $url */
 	?><script>window.ju_MageAJAX = '<?= $url ?>';</script><?php
 }
