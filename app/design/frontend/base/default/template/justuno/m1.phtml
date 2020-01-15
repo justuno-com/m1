@@ -1,9 +1,11 @@
 <?php
+// 2020-01-15 This block is never cached:
+// https://github.com/justuno-com/m1/blob/1.4.4/app/design/frontend/base/default/layout/justuno/m1.xml#L5-L20
 use Justuno_M1_Settings as S;
 use Mage_Customer_Model_Session as SCustomer;
 ?><script>
 	/** @type {string} */ var merchantId = '<?= S::id() ?>';
-	// 2020-01-14 «Validating a GUID in JavaScript» https://stackoverflow.com/a/24573236
+	// 2020-01-15 «Validating a GUID in JavaScript» https://stackoverflow.com/a/24573236
 	if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(merchantId)) {
 		console.log('JU_ERROR: Justuno Account ID (ACCID) Was Not Set Correctly...');
 	}
@@ -58,7 +60,7 @@ if (Mage::registry('current_product')) {
 else {
 	list($productid, $productstockqty) = [null, null];
 }
-// 2020-01-14 «How to get Magento customer ID» https://stackoverflow.com/a/17236128
+// 2020-01-15 «How to get Magento customer ID» https://stackoverflow.com/a/17236128
 $sCustomer = Mage::getSingleton('customer/session'); /** @var SCustomer $sCustomer */
 ?>
 <script>

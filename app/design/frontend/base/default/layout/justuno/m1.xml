@@ -2,7 +2,7 @@
 <layout version='0.1.0'>
 	<default>
 		<reference name='head'>
-<!-- 2020-01-14
+<!-- 2020-01-15
 This block is never cached because blocks in Magento 1 are not cacheable by default:
 @see Mage_Core_Block_Abstract::_loadCache():
 	if (is_null($this->getCacheLifetime()) || !$this->_getApp()->useCache(self::CACHE_GROUP)) {
