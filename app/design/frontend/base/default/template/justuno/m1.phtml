@@ -1,49 +1,41 @@
 <?php
 // 2020-01-15 This block is never cached:
 // https://github.com/justuno-com/m1/blob/1.4.4/app/design/frontend/base/default/layout/justuno/m1.xml#L5-L20
+use Justuno_M1_Lib as L;
 use Justuno_M1_Settings as S;
+use Mage_Catalog_Model_Product as P;
 use Mage_Checkout_Model_Session as SCheckout;
+use Mage_Core_Model_App as App;
 use Mage_Customer_Model_Session as SCustomer;
 use Mage_Sales_Model_Order as O;
 use Mage_Sales_Model_Quote as Q;
+$app = Mage::app(); /** @var App $app */
 ?><script>
-	window.ju_num = '<?= S::id() ?>';
+	window.ju_num = <?= L::ejs(S::id()) ?>;
 	// 2020-01-15 «Validating a GUID in JavaScript» https://stackoverflow.com/a/24573236
 	if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(window.ju_num)) {
 		delete window.ju_num;
 		console.log('JU_ERROR: Justuno Account ID (ACCID) Was Not Set Correctly...');
 	}
 	else {
-		window.ju_ajaxCartURL = '<?= $this->getUrl('jumagext/index/getcart')?>';
 		<?php
-			$currency = Mage::app()->getStore()->getCurrentCurrencyCode(); /** @var string $currency */
+			echo L::js('ju_ajaxCartURL', $this->getUrl('jumagext/index/getcart'), false);
 			$sCheckout = Mage::getSingleton('checkout/session'); /** @var SCheckout $sCheckout */
-			if (in_array('checkout_onepage_success', Mage::app()->getLayout()->getUpdate()->getHandles())) {
-				$oid = $sCheckout->getLastOrderId(); /** @var int $oid */
-				$o = Mage::getModel('sales/order')->load($oid); /** @var O $o */
-				?>
-				window.ju_order_id = <?= $oid ?>;
-				window.ju_order_obj = {
-					currency:'<?= $currency ?>'
-					,shipping: '<?= $o->getShippingAmount() ?>'
-					,subtotal: '<?= $o->getSubtotal() ?>'
-					,tax: '<?= $o->getTaxAmount() ?>'
-					,total: '<?= $o->getGrandTotal() ?>'
-				};
-				<?php
+			/** @var Q|O $oq */  /** @var string $oqK */
+			if (!in_array('checkout_onepage_success', $app->getLayout()->getUpdate()->getHandles())) {
+				list($oqK, $oq) = ['ju_cart_obj', $sCheckout->getQuote()];
 			}
 			else {
-				$q = $sCheckout->getQuote(); /** @var Q $q */
-				?>
-				window.ju_cart_obj = {
-					currency: '<?= $currency ?>'
-					,shipping: '<?= $q->getShippingAmount() ?>'
-					,subtotal: '<?= $q->getSubtotal() ?>'
-					,tax: '<?= $q->getTaxAmount() ?>'
-					,total: '<?= $q->getGrandTotal() ?>'
-				};
-				<?php
+				echo L::js('ju_order_id', $oid = (int)$sCheckout->getLastOrderId(), false); /** @var int $oid */
+				list($oqK, $oq) = ['ju_order_obj', Mage::getModel('sales/order')->load($oid)];
 			}
+			echo L::js($oqK, [
+				'currency' => $app->getStore()->getCurrentCurrencyCode()
+				,'shipping' => $oq->getShippingAmount()
+				,'subtotal' => $oq->getSubtotal()
+				,'tax' => $oq->getTaxAmount()
+				,'total' => $oq->getGrandTotal()
+			], false);
 		?>
 		window.asset_host = '//cdn.justuno.com/';
 		(function (i, s, o, g, r, a, m) {
@@ -59,25 +51,17 @@ use Mage_Sales_Model_Quote as Q;
 	}
 </script><?php
 if ($url = S::ajaxUrl()) { /** @var string $url */
-	?><script>window.ju_MageAJAX = '<?= $url ?>';</script><?php
+	echo L::js('ju_MageAJAX', $url);
 }
-$pageIdentifier = Mage::app()->getFrontController()->getAction()->getFullActionName();
-if (Mage::registry('current_product')) {
-	$product = Mage::registry('current_product');
-	$productid = $product->getId();
-	$productstockqty = $product->getStockItem()->getQty();
-}
-else {
-	list($productid, $productstockqty) = [null, null];
-}
+// 2020-01-15 «Get product stock quantity in magento» https://magento.stackexchange.com/a/209505
+list($pid, $qty) = ($p = Mage::registry('current_product')) /** @var P|null $p */
+	? [(int)$p->getId(), (int)$p->getStockItem()->getQty()] : [null, null]
+; /** @var int|null $pid */  /** @var int|null $qty */
 // 2020-01-15 «How to get Magento customer ID» https://stackoverflow.com/a/17236128
 $sCustomer = Mage::getSingleton('customer/session'); /** @var SCustomer $sCustomer */
-?>
-<script>
-	window.ju_MageKeys = {
-		CustomerID: '<?= $sCustomer->getId() ?>'
-		,PageID: '<?= $pageIdentifier ?>'
-		,ProductID: '<?= $productid ?>'
-		,StockQty: '<?= $productstockqty ?>'
-	};
-</script>
+echo L::js('ju_MageKeys', [
+	'CustomerID' => $sCustomer->getId()
+	,'PageID' => $app->getFrontController()->getAction()->getFullActionName()
+	,'ProductID' => $pid
+	,'StockQty' => $qty
+]);
