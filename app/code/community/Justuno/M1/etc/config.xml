@@ -4,7 +4,7 @@
 		<Justuno_M1>
 			<author>Dmitry Fedyuk</author>
 			<url>https://www.upwork.com/fl/mage2pro</url>
-			<version>1.4.5</version>
+			<version>1.5.0</version>
 		</Justuno_M1>
 	</modules>
 	<frontend>
@@ -30,11 +30,18 @@ and it's still false and shows the actual inventory»: https://github.com/justun
 		<routers>
 			<Justuno_M1>
 				<args>
-					<frontName>jumagext</frontName>
+					<frontName>justuno</frontName>
 					<module>Justuno_M1</module>
 				</args>
 				<use>standard</use>
 			</Justuno_M1>
+			<Justuno_M1_Legacy>
+				<args>
+					<frontName>jumagext</frontName>
+					<module>Justuno_M1</module>
+				</args>
+				<use>standard</use>
+			</Justuno_M1_Legacy>
 		</routers>
 	</frontend>
 	<global>

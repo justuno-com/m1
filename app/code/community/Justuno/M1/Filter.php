@@ -1,4 +1,5 @@
 <?php
+use Justuno_M1_Lib as L;
 use Mage_Catalog_Model_Resource_Product_Collection as PC;
 use Mage_Sales_Model_Resource_Order_Collection as OC;
 use Varien_Data_Collection_Db as C;
@@ -13,17 +14,16 @@ final class Justuno_M1_Filter {
 	 */
 	static function p(C $r) {
 		self::byDate($r);
-		$req = Mage::app()->getRequest(); /** @var Mage_Core_Controller_Request_Http $req */
 		/** @var string $dir */ /** @var string $suffix */
 		list($dir, $suffix) = $r instanceof PC ? ['DESC', 'Products'] : ['ASC', 'Orders'];
-		if ($field = $req->getParam("sort$suffix")) { /** @var string $field */
+		if ($field = L::req("sort$suffix")) { /** @var string $field */
 			$r->getSelect()->order("$field $dir");
 		}
 		// 2019-11-06
 		// Fix the `offset` argument of the `Varien_Db_Select::limit()` call
 		// from the `Justuno_M1_Filter::p()` method: https://github.com/justuno-com/m1/issues/34
-		$size = (int)$req->getParam('pageSize', 10); /** @var int $size */
-		$r->getSelect()->limit($size, $size * ((int)$req->getParam('currentPage', 1) - 1));
+		$size = L::reqI('pageSize', 10); /** @var int $size */
+		$r->getSelect()->limit($size, $size * (L::reqI('currentPage', 1) - 1));
 		return $r;
 	}
 
@@ -33,7 +33,7 @@ final class Justuno_M1_Filter {
 	 * @param $c $c
 	 */
 	private static function byDate(C $c) {
-		if ($since = Mage::app()->getRequest()->getParam('updatedSince')) { /** @var string $since */
+		if ($since = L::req('updatedSince')) { /** @var string $since */
 			/**
 			 * 2019-10-31
 			 * @param string $s

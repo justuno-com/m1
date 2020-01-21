@@ -1,9 +1,11 @@
 <?php
+use Justuno_M1_Lib as L;
 use Justuno_M1_Settings as S;
 // 2019-10-30
 final class Justuno_M1_Response {
 	/**
 	 * 2019-11-20
+	 * @used-by Justuno_M1_CartController::addAction()
 	 * @used-by Justuno_M1_Catalog::p()
 	 * @used-by Justuno_M1_Orders::p()
 	 * @param \Closure $f
@@ -58,11 +60,11 @@ final class Justuno_M1_Response {
 	/**
 	 * 2019-10-31
 	 * @used-by p()
-	 * @param mixed[] $a
+	 * @param mixed|mixed[] $v
 	 */
-	private static function res(array $a) {
+	private static function res($v) {
 		$r = Mage::app()->getResponse(); /** @var Zend_Controller_Response_Http $r */
 		$r->clearHeaders()->setHeader('Content-type','application/json', true);
-		$r->setBody(json_encode(self::filter($a), JSON_PRETTY_PRINT));
+		$r->setBody(L::json_encode(is_null($v) ? 'OK' : (!is_array($v) ? $v : self::filter($v))));
 	}
 }
