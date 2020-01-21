@@ -4,7 +4,7 @@ use Exception as E;
 final class Justuno_M1_Lib {
 	/**
 	 * 2020-01-21
-	 * @used-by Justuno_M1_CartController::addAction()
+	 * @used-by Justuno_M1_CartController::product()
 	 * @param mixed $cond
 	 * @param null $m
 	 * @return mixed
@@ -61,6 +61,7 @@ final class Justuno_M1_Lib {
 	/**
 	 * 2020-01-21
 	 * @used-by Justuno_M1_CartController::addAction()
+	 * @used-by Justuno_M1_CartController::product()
 	 * @used-by Justuno_M1_Filter::p()
 	 * @param string $k
 	 * @param mixed|null $d [optional]

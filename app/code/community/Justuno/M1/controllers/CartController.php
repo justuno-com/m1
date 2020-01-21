@@ -19,16 +19,13 @@ final class Justuno_M1_CartController extends Mage_Core_Controller_Front_Action 
 		 * @see Mage_Checkout_CartController::_initProduct()
 		 * https://github.com/OpenMage/magento-mirror/blob/1.9.4.3/app/code/core/Mage/Checkout/controllers/CartController.php#L103-L120
 		 */
-		$p = new P; /** @var P $p */
-		$p['store_id'] = Mage::app()->getStore()->getId();
-		$p->load(L::assert(L::reqI('product')));
-		L::assert($p->getId());
+		$p = self::product('product'); /** @var P $p */
 		$params = ['product' => $p->getId(), 'qty' => L::reqI('qty', 1)];
 		if ($p->isConfigurable()) {
-			$ch = self::product(L::reqI('variant')); /** @var P $ch */
-			$attrs = $p->getTypeInstance(true)->getConfigurableAttributesAsArray($p);
+			$ch = self::product('variant'); /** @var P $ch */
 			$sa = []; /** @var array(int => int) $sa */
-			foreach ($attrs as $a) { /** @var array(string => mixed) $a */
+			foreach ($p->getTypeInstance(true)->getConfigurableAttributesAsArray($p) as $a) {
+				/** @var array(string => mixed) $a */
 				$sa[(int)$a['attribute_id']] = $ch[$a['attribute_code']];
 			}
 			$params['super_attribute'] = $sa;
@@ -51,14 +48,14 @@ final class Justuno_M1_CartController extends Mage_Core_Controller_Front_Action 
 	/**
 	 * 2020-01-21
 	 * @used-by addAction()
-	 * @param int $id
+	 * @param string $k
 	 * @return P
 	 * @throws E
 	 */
-	private static function product($id) {
+	private static function product($k) {
 		$r = new P; /** @var P $r */
 		$r['store_id'] = Mage::app()->getStore()->getId();
-		$r->load(L::assert($id)); /** @var int $pid */
+		$r->load(L::assert(L::reqI($k))); /** @var int $pid */
 		L::assert($r->getId());
 		return $r;
 	}
