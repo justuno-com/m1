@@ -5,7 +5,7 @@ use Mage_CatalogInventory_Model_Stock_Item as SI;
 final class Justuno_M1_Catalog_Variants {
 	/**
 	 * 2019-10-30
-	 * @used-by \Justuno_M1_ResponseController::catalogAction()
+	 * @used-by Justuno_M1_ResponseController::catalogAction()
 	 * @param P $p
 	 * @return array(array(string => mixed))
 	 */

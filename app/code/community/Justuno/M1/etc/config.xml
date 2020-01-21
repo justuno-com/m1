@@ -12,7 +12,7 @@
 		<product>
 			<configurable>
 				<child>
-<!-- 2019-10-30 @see \Mage_Catalog_Model_Product_Type_Configurable::getUsedProducts() -->
+<!-- 2019-10-30 @see Mage_Catalog_Model_Product_Type_Configurable::getUsedProducts() -->
 					<attributes>
 <!-- 2019-10-30 «For the variants, I get no title returned»: https://github.com/justuno-com/m1/issues/23 -->
 						<name/>

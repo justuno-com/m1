@@ -4,7 +4,7 @@ use Mage_Catalog_Model_Product as P;
 final class Justuno_M1_Catalog_Images {
 	/**
 	 * 2019-10-30
-	 * @used-by \Justuno_M1_ResponseController::catalogAction()
+	 * @used-by Justuno_M1_ResponseController::catalogAction()
 	 * @param P $p
 	 * @return array(array(string => mixed))
 	 */

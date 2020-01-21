@@ -10,7 +10,7 @@ final class Justuno_M1_CartController extends Mage_Core_Controller_Front_Action 
 	/**
 	 * 2020-01-20
 	 * 1) "Implement the «add a configurable product to the cart» endpoint": https://github.com/justuno-com/m1/issues/38
-	 * @see \Mage_Checkout_CartController::addAction():
+	 * @see Mage_Checkout_CartController::addAction():
 	 * https://github.com/OpenMage/magento-mirror/blob/1.9.4.3/app/code/core/Mage/Checkout/controllers/CartController.php#L203-L280
 	 */
 	function addAction() {R::p(function() {
@@ -35,7 +35,7 @@ final class Justuno_M1_CartController extends Mage_Core_Controller_Front_Action 
 		}
 		/**
 		 * 2020-01-21
-		 * @see \Mage_Checkout_CartController::addAction()
+		 * @see Mage_Checkout_CartController::addAction()
 		 * https://github.com/OpenMage/magento-mirror/blob/1.9.4.3/app/code/core/Mage/Checkout/controllers/CartController.php#L236-L250
 		 */
 		$cart = Mage::getSingleton('checkout/cart'); /** @var Cart $cart */
