@@ -24,7 +24,7 @@ final class Justuno_M1_CartController extends Mage_Core_Controller_Front_Action 
 		$p->load(L::assert(L::reqI('product')));
 		L::assert($p->getId());
 		$params = ['product' => $p->getId(), 'qty' => L::reqI('qty', 1)];
-		if ($isConfigurable = $p->isConfigurable()) { /** @var bool $isConfigurable */
+		if ($p->isConfigurable()) {
 			$ch = self::product(L::reqI('variant')); /** @var P $ch */
 			$attrs = $p->getTypeInstance(true)->getConfigurableAttributesAsArray($p);
 			$sa = []; /** @var array(int => int) $sa */
