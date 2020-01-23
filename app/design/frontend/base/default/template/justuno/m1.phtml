@@ -72,7 +72,8 @@ $d = [
 			window.ju_order_id = d.orderID;
 		}
 		window[d.orderID ? 'ju_order_obj' : 'ju_cart_obj'] = d.oq;
-		window.asset_host = '//cdn.justuno.com/';
+		// 2020-01-24 "Replace `cdn.justuno.com` with `cdn.jst.ai`": https://github.com/justuno-com/m1/issues/39
+		window.asset_host = '//cdn.jst.ai/';
 		(function (i, s, o, g, r, a, m) {
 			i[r] = i[r] || function () {
 				(i[r].q = i[r].q || []).push(arguments);
