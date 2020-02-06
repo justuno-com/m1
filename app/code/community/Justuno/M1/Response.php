@@ -9,9 +9,16 @@ final class Justuno_M1_Response {
 	 * @used-by Justuno_M1_Catalog::p()
 	 * @used-by Justuno_M1_Orders::p()
 	 * @param \Closure $f
+	 * @param bool $auth [optional]
 	 */
-	static function p(\Closure $f) {/** @var array(string => mixed) $r */
-		try {self::authorize(); $r = $f();}
+	static function p(\Closure $f, $auth = true) {/** @var array(string => mixed) $r */
+		try {
+			// 2020-02-06
+			// "`justuno/cart/add` should not require the Justuno token (Magento customer authentication is enough)":
+			// https://github.com/justuno-com/m1/issues/40
+			!$auth || self::authorize();
+			$r = $f();
+		}
 		catch (\Exception $e) {$r = ['message' => $e->getMessage()];}
 		self::res($r);
 	}
