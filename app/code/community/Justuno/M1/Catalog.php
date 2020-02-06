@@ -121,7 +121,7 @@ final class Justuno_M1_Catalog {
 			 */
 			return $r + ['BrandId' => $brand, 'BrandName' => !$brand ? null : ($p->getAttributeText($brand) ?: null)];
 		}, Filter::p($pc)->getItems()));
-	});}
+	}, true);}
 
 	/**
 	 * 2019-10-27
