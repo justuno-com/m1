@@ -1,4 +1,5 @@
 <?php
+use Justuno_M1_Lib as L;
 use Mage_Catalog_Model_Product as P;
 use Mage_CatalogInventory_Model_Stock_Item as SI;
 // 2019-10-30
@@ -87,9 +88,12 @@ final class Justuno_M1_Catalog_Variants {
 		 * «within the ProductResponse and the Variants OptionType is being sent back as OptionType90, 91, etc...
 		 * We need these sent back starting at OptionType1, OptionType2»:
 		 * https://github.com/justuno-com/m1/issues/14
+		 * 2020-03-13
+		 * "The Boolean values of `Option<X>` attributes should be converted to the «true» / «false» strings":
+		 * https://github.com/justuno-com/m1/issues/41
 		 */
 		foreach (array_values($opts) as $id => $code) {$id++;
-			$r["Option$id"] = $p->getAttributeText($code);
+			$r["Option$id"] = strval(!is_bool($v = $p->getAttributeText($code)) ? $v : L::bts($v));
 		}
 		return $r;
 	}

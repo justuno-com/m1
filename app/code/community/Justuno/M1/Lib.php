@@ -13,6 +13,14 @@ final class Justuno_M1_Lib {
 	static function assert($cond, $m = null) {return $cond ?: self::error($m);}
 
 	/**
+	 * 2020-03-13
+	 * @used-by \Justuno_M1_Catalog_Variants::variant()
+	 * @param boolean $v
+	 * @return string
+	 */
+	static function bts($v) {return $v ? 'true' : 'false';}
+
+	/**
 	 * 2020-01-16 It formats $v as a value which can be used in the `var name = <?= df_ejs($v); ?>;` expression.
 	 * @used-by js()
 	 * @used-by app/design/frontend/base/default/template/justuno/m1.phtml
