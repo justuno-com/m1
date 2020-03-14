@@ -14,3 +14,7 @@
 !app/design/frontend/base/default/layout/justuno/**/*
 !app/design/frontend/base/default/template/justuno/**/*
 !app/etc/modules/Justuno_M1.xml
+# 2020-03-14
+# "Respond to the `/justuno/service-worker.js` request with the provided JavaScript":
+# https://github.com/justuno-com/m1/issues/42
+!/justuno/**/*
