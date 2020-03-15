@@ -8,7 +8,7 @@ rm -rf app/code/community/Justuno ;
 rm -rf app/design/adminhtml/default/default/template/justuno ;
 rm -rf app/design/frontend/base/default/layout/justuno ;
 rm -rf app/design/frontend/base/default/template/justuno  ;
-rm -rf justuno ;
+rm -rf apps/justuno ;
 ORG=justuno-com ;
 REPO=m1 ;
 FILE=$REPO.tar.gz ;
