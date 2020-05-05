@@ -30,7 +30,7 @@ final class Justuno_M1_Filter {
 	/**
 	 * 2019-10-31
 	 * @used-by p()
-	 * @param $c $c
+	 * @param C|OC|PC $c
 	 */
 	private static function byDate(C $c) {
 		if ($since = L::req('updatedSince')) { /** @var string $since */
