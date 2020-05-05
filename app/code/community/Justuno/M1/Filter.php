@@ -14,6 +14,7 @@ final class Justuno_M1_Filter {
 	 */
 	static function p(C $r) {
 		self::byDate($r);
+		self::byProduct($r);
 		/** @var string $dir */ /** @var string $suffix */
 		list($dir, $suffix) = $r instanceof PC ? ['DESC', 'Products'] : ['ASC', 'Orders'];
 		if ($field = L::req("sort$suffix")) { /** @var string $field */
@@ -46,6 +47,36 @@ final class Justuno_M1_Filter {
 				return date($f, $dt->format('U'));
 			};
 			$c->addFieldToFilter('updated_at', ['from' => $d($since), 'to' => $d('2035-01-01 23:59:59')]);
+		}
+	}
+
+	/**
+	 * 2020-05-06
+	 * "Provide an ability to filter the `jumagext/response/catalog` response by a concrete product":
+	 * https://github.com/justuno-com/m1/issues/44
+	 * @used-by p()
+	 * @param C|OC|PC $c
+	 */
+	private static function byProduct(C $c) {
+		if ($id = L::req('id')) { /** @var string $id */
+			$c->addFieldToFilter('entity_id', $id);
+		}
+		if ($name = L::req('title')) { /** @var string $name */
+			/**
+			 * 2020-05-06
+			 * @uses \Mage_Eav_Model_Entity_Collection_Abstract::addFieldToFilter()
+			 * works even if the Flat Mode is disabled because it just delegates the work to
+			 * @see \Mage_Eav_Model_Entity_Collection_Abstract::addAttributeToFilter():
+			 *	public function addFieldToFilter($attribute, $condition = null) {
+			 *		return $this->addAttributeToFilter($attribute, $condition);
+			 *	}
+			 * https://github.com/OpenMage/magento-mirror/blob/1.9.4.5/app/code/core/Mage/Eav/Model/Entity/Collection/Abstract.php#L333-L342
+			 * https://github.com/OpenMage/magento-mirror/blob/1.4.0.0/app/code/core/Mage/Eav/Model/Entity/Collection/Abstract.php#L305-L314
+			 */
+			$c->addFieldToFilter('name', [['like' => "%$name%"]]);
+		}
+		if ($sku = L::req('sku')) { /** @var string $sku */
+			$c->addFieldToFilter('sku', [['like' => "%$sku%"]]);
 		}
 	}
 }

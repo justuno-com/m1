@@ -59,6 +59,7 @@ final class Justuno_M1_Lib {
 	 * 2020-01-21
 	 * @used-by reqI()
 	 * @used-by Justuno_M1_Filter::byDate()
+	 * @used-by Justuno_M1_Filter::byProduct()
 	 * @used-by Justuno_M1_Filter::p()
 	 * @param string $k
 	 * @param mixed|null $d [optional]
