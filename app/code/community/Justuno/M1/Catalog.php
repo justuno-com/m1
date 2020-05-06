@@ -25,7 +25,7 @@ final class Justuno_M1_Catalog {
 		 * but we'd want to set the inventoryquantity to -9999»:
 		 * https://github.com/justuno-com/m1/issues/4
 		 * 2) I do not use
-		 * 		$products->setVisibility([V::VISIBILITY_BOTH, V::VISIBILITY_IN_CATALOG, V::VISIBILITY_IN_SEARCH]);
+		 * 		$pc->setVisibility([V::VISIBILITY_BOTH, V::VISIBILITY_IN_CATALOG, V::VISIBILITY_IN_SEARCH]);
 		 * because it filters out disabled products.
 		 */
 		$pc->addAttributeToFilter('visibility', ['in' => [
