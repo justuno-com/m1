@@ -22,7 +22,7 @@ final class Justuno_M1_Catalog_Variants {
 			// 2019-30-31
 			// "A configurable product without any associated child products does not produce variants":
 			// https://github.com/justuno-com/m1/issues/26
-			if (!($children = $ct->getUsedProducts(null, $p))) { /** @var P $children */
+			if (!($ch = $ct->getUsedProducts(null, $p))) { /** @var P $ch */
 				// 2019-30-31
 				// "Products: some Variants are objects instead of arrays of objects":
 				// https://github.com/justuno-com/m1/issues/32
@@ -32,7 +32,7 @@ final class Justuno_M1_Catalog_Variants {
 				$opts = array_column($ct->getConfigurableAttributesAsArray($p), 'attribute_code', 'id');
 				$r = array_values(array_map(function(P $c) use($opts, $p) {return
 					self::variant($c, $p, $opts)
-				;}, $children));
+				;}, $ch));
 			}
 		}
 		return $r;
