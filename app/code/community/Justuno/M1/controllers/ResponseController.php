@@ -8,6 +8,9 @@ final class Justuno_M1_ResponseController extends Mage_Core_Controller_Front_Act
 	 */
 	function catalogAction() {Justuno_M1_Catalog::p();}
 
+	/** 2020-05-06 "Implement an endpoint to return product quantities": https://github.com/justuno-com/m1/issues/45 */
+	function inventoryAction() {Justuno_M1_Inventory::p();}
+
 	/**
 	 * 2019-10-27
 	 * 2020-01-15 https://support.justuno.com/ai-upsell-cross-sell-product-recommendations-plus-feeds

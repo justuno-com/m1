@@ -7,6 +7,7 @@ final class Justuno_M1_Response {
 	 * 2019-11-20
 	 * @used-by Justuno_M1_CartController::addAction()
 	 * @used-by Justuno_M1_Catalog::p()
+	 * @used-by Justuno_M1_Inventory::p()
 	 * @used-by Justuno_M1_Orders::p()
 	 * @param \Closure $f
 	 * @param bool $auth [optional]
