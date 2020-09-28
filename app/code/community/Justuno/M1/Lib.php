@@ -1,6 +1,6 @@
 <?php
 use Exception as E;
-// 2020-01-15
+# 2020-01-15
 final class Justuno_M1_Lib {
 	/**
 	 * 2020-01-21

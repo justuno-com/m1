@@ -5,7 +5,7 @@ use Justuno_M1_Response as R;
 use Mage_Catalog_Model_Product as P;
 use Mage_Checkout_Model_Cart as Cart;
 use Mage_Checkout_Model_Session as Sess;
-// 2020-01-20
+# 2020-01-20
 final class Justuno_M1_CartController extends Mage_Core_Controller_Front_Action {
 	/**
 	 * 2020-01-20

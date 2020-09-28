@@ -1,7 +1,7 @@
 <?php
 use Justuno_M1_Lib as L;
 use Justuno_M1_Settings as S;
-// 2019-10-30
+# 2019-10-30
 final class Justuno_M1_Response {
 	/**
 	 * 2019-11-20
@@ -14,9 +14,9 @@ final class Justuno_M1_Response {
 	 */
 	static function p(\Closure $f, $auth = false) {/** @var array(string => mixed) $r */
 		try {
-			// 2020-02-06
-			// "`justuno/cart/add` should not require the Justuno token (Magento customer authentication is enough)":
-			// https://github.com/justuno-com/m1/issues/40
+			# 2020-02-06
+			# "`justuno/cart/add` should not require the Justuno token (Magento customer authentication is enough)":
+			# https://github.com/justuno-com/m1/issues/40
 			!$auth || self::authorize();
 			$r = $f();
 		}

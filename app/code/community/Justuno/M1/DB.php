@@ -2,7 +2,7 @@
 use Mage_Core_Model_Resource as RC;
 use Varien_Db_Adapter_Pdo_Mysql as MySQL;
 use Varien_Db_Select as Select;
-// 2019-11-07
+# 2019-11-07
 final class Justuno_M1_DB {
 	/**
 	 * 2019-11-07

@@ -8,7 +8,7 @@ use Mage_Sales_Model_Order as O;
 use Mage_Sales_Model_Order_Address as A;
 use Mage_Sales_Model_Order_Item as OI;
 use Mage_Sales_Model_Resource_Order_Collection as OC;
-// 2019-10-31
+# 2019-10-31
 final class Justuno_M1_Orders {
 	/**
 	 * 2019-10-31
@@ -37,15 +37,15 @@ final class Justuno_M1_Orders {
 		,'IP' => $o->getRemoteIp()
 		,'LineItems' => array_values(array_map(function(OI $i) {return [
 			'OrderId' => $i->getOrderId()
-			// 2019-10-31
-			// Orders: «lineItem prices currently being returned in the orders feed are 0 always»:
-			// https://github.com/justuno-com/m1/issues/31
+			# 2019-10-31
+			# Orders: «lineItem prices currently being returned in the orders feed are 0 always»:
+			# https://github.com/justuno-com/m1/issues/31
 			,'Price' => OIH::price($i)
 			,'ProductId' => OIH::top($i)->getProductId()
 			,'TotalDiscount' => (float)OIH::top($i)->getDiscountAmount()
-			// 2019-10-31
-			// Orders: «VariantID for lineItems is currently hardcoded as ''»:
-			// https://github.com/justuno-com/m1/issues/29
+			# 2019-10-31
+			# Orders: «VariantID for lineItems is currently hardcoded as ''»:
+			# https://github.com/justuno-com/m1/issues/29
 			,'VariantId' => $i->getProductId()
 		];}, array_filter($o->getAllItems(), function(OI $i) {return !$i->getChildrenItems();})))
 		,'OrderNumber' => $o->getId()

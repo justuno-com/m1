@@ -3,7 +3,7 @@ use Justuno_M1_Response as R;
 use Mage_Catalog_Model_Product as P;
 use Mage_Catalog_Model_Product_Visibility as V;
 use Mage_Catalog_Model_Resource_Product_Collection as PC;
-// 2020-05-06 "Implement an endpoint to return product quantities": https://github.com/justuno-com/m1/issues/45
+# 2020-05-06 "Implement an endpoint to return product quantities": https://github.com/justuno-com/m1/issues/45
 final class Justuno_M1_Inventory {
 	/**
 	 * 2020-05-06

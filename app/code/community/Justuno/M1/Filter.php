@@ -3,7 +3,7 @@ use Justuno_M1_Lib as L;
 use Mage_Catalog_Model_Resource_Product_Collection as PC;
 use Mage_Sales_Model_Resource_Order_Collection as OC;
 use Varien_Data_Collection_Db as C;
-// 2019-10-31
+# 2019-10-31
 final class Justuno_M1_Filter {
 	/**
 	 * 2019-10-31
@@ -20,9 +20,9 @@ final class Justuno_M1_Filter {
 		if ($field = L::req("sort$suffix")) { /** @var string $field */
 			$r->getSelect()->order("$field $dir");
 		}
-		// 2019-11-06
-		// Fix the `offset` argument of the `Varien_Db_Select::limit()` call
-		// from the `Justuno_M1_Filter::p()` method: https://github.com/justuno-com/m1/issues/34
+		# 2019-11-06
+		# Fix the `offset` argument of the `Varien_Db_Select::limit()` call
+		# from the `Justuno_M1_Filter::p()` method: https://github.com/justuno-com/m1/issues/34
 		$size = L::reqI('pageSize', 10); /** @var int $size */
 		$r->getSelect()->limit($size, $size * (L::reqI('currentPage', 1) - 1));
 		return $r;

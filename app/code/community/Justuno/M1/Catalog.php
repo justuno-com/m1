@@ -10,7 +10,7 @@ use Mage_Catalog_Model_Resource_Product_Collection as PC;
 use Mage_Review_Model_Review_Summary as RS;
 use Mage_Tag_Model_Resource_Tag_Collection as TC;
 use Mage_Tag_Model_Tag as T;
-// 2019-10-31
+# 2019-10-31
 final class Justuno_M1_Catalog {
 	/**
 	 * 2019-10-31
@@ -39,24 +39,24 @@ final class Justuno_M1_Catalog {
 			$r = [
 				'Categories' => array_values(array_map(function(C $c) {return [
 					'Description' => $c['description']
-					// 2019-10-30
-					// «json construct types are not correct for some values»:
-					// https://github.com/justuno-com/m1/issues/8
+					# 2019-10-30
+					# «json construct types are not correct for some values»:
+					# https://github.com/justuno-com/m1/issues/8
 					,'ID' => $c->getId()
-					// 2019-10-30
-					// «In Categories imageURL is being sent back as a boolean in some cases,
-					// it should always be sent back as a string,
-					// if there is not url just don't send the property back»:
-					// https://github.com/justuno-com/m1/issues/12
+					# 2019-10-30
+					# «In Categories imageURL is being sent back as a boolean in some cases,
+					# it should always be sent back as a string,
+					# if there is not url just don't send the property back»:
+					# https://github.com/justuno-com/m1/issues/12
 					,'ImageURL' => $c->getImageUrl() ?: null
 					,'Keywords' => $c['meta_keywords']
 					,'Name' => $c->getName()
 					,'URL' => $c->getUrl()
 				];}, $cc->addAttributeToSelect('*')->addFieldToFilter('level', ['neq' => 1])->getItems()))
 				,'CreatedAt' => $p['created_at']
-				// 2019-10-30
-				// «The parent ID is pulling the sku, it should be pulling the ID like the variant does»:
-				// https://github.com/justuno-com/m1/issues/19
+				# 2019-10-30
+				# «The parent ID is pulling the sku, it should be pulling the ID like the variant does»:
+				# https://github.com/justuno-com/m1/issues/19
 				,'ID' => $p->getId()
 				/**
 				 * 2019-10-30
@@ -77,21 +77,21 @@ final class Justuno_M1_Catalog {
 				  * «Price should be Price > Dynamic Price»: https://github.com/justuno-com/m1/issues/21
 				  */
 				,'Price' => (float)($p['price'] ?: $p->getPrice())
-				// 2019-10-30 «ReviewsCount and ReviewSums need to be Ints»: https://github.com/justuno-com/m1/issues/11
+				# 2019-10-30 «ReviewsCount and ReviewSums need to be Ints»: https://github.com/justuno-com/m1/issues/11
 				,'ReviewsCount' => (int)$rs->getReviewsCount()
-				// 2019-10-30
-				// 1) "Add the `ReviewsCount` and `ReviewsRatingSum` values to the `catalog` response":
-				// https://github.com/justuno-com/m1/issues/15
-				// 2) «ReviewsCount and ReviewSums need to be Ints»: https://github.com/justuno-com/m1/issues/11
+				# 2019-10-30
+				# 1) "Add the `ReviewsCount` and `ReviewsRatingSum` values to the `catalog` response":
+				# https://github.com/justuno-com/m1/issues/15
+				# 2) «ReviewsCount and ReviewSums need to be Ints»: https://github.com/justuno-com/m1/issues/11
 				,'ReviewsRatingSum' => (int)$rs->getRatingSummary()
-				// 2019-10-30
-				// «MSRP, Price, SalePrice, Variants.MSRP, and Variants.SalePrice all need to be Floats,
-				// or if that is not possible then Ints»: https://github.com/justuno-com/m1/issues/10
+				# 2019-10-30
+				# «MSRP, Price, SalePrice, Variants.MSRP, and Variants.SalePrice all need to be Floats,
+				# or if that is not possible then Ints»: https://github.com/justuno-com/m1/issues/10
 				,'SalePrice' => (float)$p->getPrice()
 				,'Tags' => self::tags($p)
 				,'Title' => $p['name']
 				,'UpdatedAt' => $p['updated_at']
-				// 2019-10-30 https://github.com/justuno-com/m1/issues/16
+				# 2019-10-30 https://github.com/justuno-com/m1/issues/16
 				,'URL' => R::url($p['url_path'] ?: $p['url_key'])
 				/**
 				 * 2019-10-30

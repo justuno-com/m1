@@ -1,6 +1,6 @@
 <?php
 use Mage_Catalog_Model_Resource_Eav_Attribute as A;
-// 2019-11-26
+# 2019-11-26
 final class Justuno_M1_Config_Brand {
 	/**
 	 * 2019-11-26

@@ -6,9 +6,9 @@ $t_catalog_product_super_link = DB::t('catalog_product_super_link');
 $t_cataloginventory_stock_status = DB::t('cataloginventory_stock_status');
 foreach (['insert', 'update'] as $e) {/** @var string $e */
 	$name = "justuno__cataloginventory_stock_status__$e"; /** @var string $name */
-	// 2020-08-27
-	// «This version of MariaDB doesn't yet support 'multiple triggers with the same action time and event for one table»:
-	// https://github.com/justuno-com/m2/issues/15
+	# 2020-08-27
+	# «This version of MariaDB doesn't yet support 'multiple triggers with the same action time and event for one table»:
+	# https://github.com/justuno-com/m2/issues/15
 	DB::conn()->query("DROP TRIGGER IF EXISTS $name;");
 	DB::conn()->query("
 		CREATE TRIGGER $name AFTER $e ON $t_cataloginventory_stock_status
