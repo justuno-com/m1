@@ -21,6 +21,15 @@ final class Justuno_M1_Lib {
 	static function bts($v) {return $v ? 'true' : 'false';}
 
 	/**
+	 * 2020-09-29
+	 * @used-by \Justuno_M1_Catalog_Images::p()
+	 * @param string $haystack
+	 * @param string $needle
+	 * @return bool
+	 */
+	static function contains($haystack, $needle) {return false !== strpos($haystack, $needle);}
+
+	/**
 	 * 2020-01-16 It formats $v as a value which can be used in the `var name = <?= df_ejs($v); ?>;` expression.
 	 * @used-by js()
 	 * @used-by app/design/frontend/base/default/template/justuno/m1.phtml
