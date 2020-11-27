@@ -17,6 +17,16 @@ final class Justuno_M1_Catalog {
 	 * @used-by Justuno_M1_ResponseController::catalogAction()
 	 */
 	static function p() {R::p(function() {
+		/**
+		 * 2020-11-27
+		 * 1) "Disable the «Use Flat Catalog Product» option for the `jumagext/response/catalog` request":
+		 * https://github.com/justuno-com/m1/issues/50
+		 * 2) We can not use @see \Mage_Catalog_Helper_Product_Flat::disableFlatCollection()
+		 * because it exists only in Magento ≥ 1.9.4.0:
+		 * https://github.com/OpenMage/magento-mirror/blob/1.9.4.0/app/code/core/Mage/Catalog/Helper/Product/Flat.php#L175-L187
+		 * https://github.com/OpenMage/magento-mirror/blob/1.9.3.0/app/code/core/Mage/Catalog/Helper/Product/Flat.php
+		 */
+		Justuno_M1_Rewrite_Catalog_Helper_Product_Flat::$JU_DISABLE = true;
 		$pc = new PC; /** @var PC $pc */
 		$pc->addAttributeToSelect('*');
 		/**
