@@ -1,14 +1,14 @@
 <script type='text/javascript'>
 	function generateToken() {
-		function randomString(length, chars) {
+		function randomString(chars) {
 			var r = '';
-			for (var i = length; i > 0; --i) {
+			for (var i = 32; i > 0; --i) {
 				r += chars[Math.floor(Math.random() * chars.length)];
 			}
 			return r;
 		}
 		document.getElementById('justuno_justuno_settings_jutoken').value = randomString(
-			32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+			'0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 		);
 		return false;
 	}
