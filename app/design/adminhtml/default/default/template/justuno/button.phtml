@@ -1,18 +1,16 @@
-<script type="text/javascript">
-	//<![CDATA[
-		function generateToken(){
-		var rString = randomString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
-		var s   = document.getElementById("justuno_justuno_settings_jutoken");
-		s.value = rString;
+<script type='text/javascript'>
+	function generateToken() {
+		function randomString(length, chars) {
+			var r = '';
+			for (var i = length; i > 0; --i) {
+				r += chars[Math.floor(Math.random() * chars.length)];
+			}
+			return r;
+		}
+		document.getElementById('justuno_justuno_settings_jutoken').value = randomString(
+			32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+		);
 		return false;
 	}
-
-	function randomString(length, chars) {
-		var result = '';
-		for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
-		return result;
-	}
-
-	//]]>
 </script>
-<?php echo $this->getButtonHtml() ?>
+<?= $this->getButtonHtml();
