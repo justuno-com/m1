@@ -12,7 +12,7 @@ final class Justuno_M1_Response {
 	 * @param \Closure $f
 	 * @param bool $auth [optional]
 	 */
-	static function p(\Closure $f, $auth = false) {/** @var array(string => mixed) $r */
+	static function p(\Closure $f, $auth = true) {/** @var array(string => mixed) $r */
 		try {
 			# 2020-02-06
 			# "`justuno/cart/add` should not require the Justuno token (Magento customer authentication is enough)":

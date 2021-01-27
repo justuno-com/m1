@@ -22,5 +22,5 @@ final class Justuno_M1_Inventory {
 		return array_values(array_map(function(P $p) {return [
 			'ID' => $p->getId(), 'Variants' => Justuno_M1_Inventory_Variants::p($p)
 		];}, $pc->getItems()));
-	}, true);}
+	});}
 }

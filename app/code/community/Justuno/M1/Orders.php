@@ -57,7 +57,7 @@ final class Justuno_M1_Orders {
 		,'TotalPrice' => (float)$o->getGrandTotal()
 		,'TotalTax' => (float)$o->getTaxAmount()
 		,'UpdatedAt' => $o->getUpdatedAt()
-	];}, Filter::p(new OC)->getItems()));}, true);}
+	];}, Filter::p(new OC)->getItems()));});}
 
 	/**
 	 * 2019-10-27

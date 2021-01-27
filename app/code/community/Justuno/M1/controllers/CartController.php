@@ -42,7 +42,7 @@ final class Justuno_M1_CartController extends Mage_Core_Controller_Front_Action 
 		Mage::dispatchEvent('checkout_cart_add_product_complete', [
 			'product' => $p, 'request' => $this->getRequest(), 'response' => $this->getResponse()
 		]);
-	});}
+	}, false);}
 
 	/**
 	 * 2020-01-21
