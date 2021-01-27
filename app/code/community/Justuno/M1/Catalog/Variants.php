@@ -18,7 +18,7 @@ final class Justuno_M1_Catalog_Variants {
 			$r = [self::variant($p)];
 		}
 		else {
-			$ct = $p->getTypeInstance(); /** @var Mage_Catalog_Model_Product_Type_Configurable $ct */
+			$ct = L::productTI($p); /** @var Mage_Catalog_Model_Product_Type_Configurable $ct */
 			if (!($ch = $ct->getUsedProducts(null, $p))) { /** @var P $ch */
 				# 2020-11-23
 				# 1) "A configurable product without any associated child products should not produce variants":

@@ -1,5 +1,12 @@
 <?php
 use Exception as E;
+use Mage_Bundle_Model_Product_Type as ptBundle;
+use Mage_Catalog_Model_Product as P;
+use Mage_Catalog_Model_Product_Type_Abstract as ptAbstract;
+use Mage_Catalog_Model_Product_Type_Configurable as ptConfigurable;
+use Mage_Catalog_Model_Product_Type_Grouped as ptGrouped;
+use Mage_Catalog_Model_Product_Type_Simple as ptSimple;
+use Mage_Catalog_Model_Product_Type_Virtual as ptVirtual;
 # 2020-01-15
 final class Justuno_M1_Lib {
 	/**
@@ -63,6 +70,27 @@ final class Justuno_M1_Lib {
 	static function json_encode($v) {return json_encode($v,
 		JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE
 	);}
+
+	/**
+	 * 2021-01-27
+	 * 1) In Magento 2, the \Magento\Catalog\Model\Product::getTypeInstance() method does not have arguments:
+	 * https://github.com/magento/magento2/blob/2.0.0/app/code/Magento/Catalog/Model/Product.php#L628-L640
+	 * It always returns a singleton:
+	 * 1.1) \Magento\Catalog\Model\Product\Type::factory():
+	 * https://github.com/magento/magento2/blob/2.0.0/app/code/Magento/Catalog/Model/Product/Type.php#L114-L135
+	 * 1.2) \Magento\Catalog\Model\Product\Type\Pool::get()
+	 * https://github.com/magento/magento2/blob/2.0.0/app/code/Magento/Catalog/Model/Product/Type/Pool.php#L31-L49
+	 * 2) In Magento 1, the method has an optional $singleton argument with the default `false` value:
+	 * @uses \Mage_Catalog_Model_Product::getTypeInstance()
+	 * https://github.com/OpenMage/magento-mirror/blob/1.9.4.5/app/code/core/Mage/Catalog/Model/Product.php#L252-L275
+	 * @used-by \Justuno_M1_CartController::addAction()
+	 * @used-by \Justuno_M1_Catalog::p()
+	 * @used-by \Justuno_M1_Catalog_Variants::p()
+	 * @used-by \Justuno_M1_Inventory_Variants::p()
+	 * @param P $p
+	 * @return ptAbstract|ptBundle|ptConfigurable|ptGrouped|ptSimple|ptVirtual
+	 */
+	static function productTI(P $p) {return $p->getTypeInstance(true);}
 
 	/**
 	 * 2020-01-21

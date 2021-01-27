@@ -1,5 +1,6 @@
 <?php
 use Justuno_M1_Filter as Filter;
+use Justuno_M1_Lib as L;
 use Justuno_M1_Response as R;
 use Justuno_M1_Settings as S;
 use Mage_Catalog_Model_Category as C;
@@ -112,7 +113,7 @@ final class Justuno_M1_Catalog {
 				,'Variants' => Justuno_M1_Catalog_Variants::p($p)
 			] + Justuno_M1_Catalog_Images::p($p);
 			if ('configurable' === $p->getTypeId()) {
-				$ct = $p->getTypeInstance(); /** @var Mage_Catalog_Model_Product_Type_Configurable $ct */
+				$ct = L::productTI($p); /** @var Mage_Catalog_Model_Product_Type_Configurable $ct */
 				$opts = array_column($ct->getConfigurableAttributesAsArray($p), 'attribute_code', 'id');
 				/**
 				 * 2019-10-30

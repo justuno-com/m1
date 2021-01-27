@@ -24,20 +24,7 @@ final class Justuno_M1_CartController extends Mage_Core_Controller_Front_Action 
 		if ($p->isConfigurable()) {
 			$ch = self::product('variant'); /** @var P $ch */
 			$sa = []; /** @var array(int => int) $sa */
-			/**
-			 * 2020-01-27
-			 * 1) In Magento 2, the \Magento\Catalog\Model\Product::getTypeInstance() method does not have arguments:
-			 * https://github.com/magento/magento2/blob/2.0.0/app/code/Magento/Catalog/Model/Product.php#L628-L640
-			 * It always returns a singleton:
-			 * 1.1) \Magento\Catalog\Model\Product\Type::factory():
-			 * https://github.com/magento/magento2/blob/2.0.0/app/code/Magento/Catalog/Model/Product/Type.php#L114-L135
-			 * 1.2) \Magento\Catalog\Model\Product\Type\Pool::get()
-			 * https://github.com/magento/magento2/blob/2.0.0/app/code/Magento/Catalog/Model/Product/Type/Pool.php#L31-L49
-			 * 2) In Magento 1, the method has an optional $singleton argument with the default `false` value:
-			 * @uses \Mage_Catalog_Model_Product::getTypeInstance()
-			 * https://github.com/OpenMage/magento-mirror/blob/1.9.4.5/app/code/core/Mage/Catalog/Model/Product.php#L252-L275
-			 */
-			foreach ($p->getTypeInstance(true)->getConfigurableAttributesAsArray($p) as $a) {
+			foreach (L::productTI($p)->getConfigurableAttributesAsArray($p) as $a) {
 				/** @var array(string => mixed) $a */
 				$sa[(int)$a['attribute_id']] = $ch[$a['attribute_code']];
 			}
