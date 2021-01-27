@@ -26,15 +26,6 @@ final class Justuno_M1_CartController extends Mage_Core_Controller_Front_Action 
 			$sa = []; /** @var array(int => int) $sa */
 			/**
 			 * 2020-01-27
-			 * 1) The \Magento\Catalog\Model\Product::getTypeInstance() method does not have arguments in Magento 2:
-			 * https://github.com/magento/magento2/blob/2.0.0/app/code/Magento/Catalog/Model/Product.php#L628-L640
-			 * 2) It has an optional $singleton argument with the default `false` value in Magento 1:
-			 * @uses \Mage_Catalog_Model_Product::getTypeInstance()
-			 * https://github.com/OpenMage/magento-mirror/blob/1.9.4.5/app/code/core/Mage/Catalog/Model/Product.php#L252-L275
-			 * 3) In Magento 2, the method always returns a singleton.
-			 */
-			/**
-			 * 2020-01-27
 			 * 1) In Magento 2, the \Magento\Catalog\Model\Product::getTypeInstance() method does not have arguments:
 			 * https://github.com/magento/magento2/blob/2.0.0/app/code/Magento/Catalog/Model/Product.php#L628-L640
 			 * It always returns a singleton:
