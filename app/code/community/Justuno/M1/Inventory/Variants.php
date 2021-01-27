@@ -2,7 +2,7 @@
 use Justuno_M1_Lib as L;
 use Mage_Catalog_Model_Product as P;
 use Mage_CatalogInventory_Model_Stock_Item as SI;
-// 2020-05-06 "Implement an endpoint to return product quantities": https://github.com/justuno-com/m1/issues/45
+# 2020-05-06 "Implement an endpoint to return product quantities": https://github.com/justuno-com/m1/issues/45
 final class Justuno_M1_Inventory_Variants {
 	/**
 	 * 2020-05-06
@@ -12,9 +12,8 @@ final class Justuno_M1_Inventory_Variants {
 	 */
 	static function p(P $p) { /** @var array(array(string => mixed)) $r */
 		if ('configurable' !== $p->getTypeId()) {
-			// 2019-30-31
-			// "Products: some Variants are objects instead of arrays of objects":
-			// https://github.com/justuno-com/m1/issues/32
+			# 2019-30-31
+			# "Products: some Variants are objects instead of arrays of objects": https://github.com/justuno-com/m1/issues/32
 			$r = [self::variant($p)];
 		}
 		else {
