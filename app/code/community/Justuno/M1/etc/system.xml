@@ -18,7 +18,7 @@
 					<sort_order>10</sort_order>
 					<fields>
 						<accid>
-							<comment><![CDATA[<a href='https://github.com/justuno-com/m2#account-number' target='_blank'>where to find it?</a>]]></comment>
+							<comment><![CDATA[<a href='https://github.com/justuno-com/m1#account-number' target='_blank'>where to find it?</a>]]></comment>
 							<frontend_type>text</frontend_type>
 							<label>Justuno Account Number</label>
 							<show_in_default>1</show_in_default>
