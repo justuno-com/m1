@@ -40,8 +40,7 @@ final class Justuno_M1_Orders {
 			,'ProductId' => OIH::top($i)->getProductId()
 			,'TotalDiscount' => (float)OIH::top($i)->getDiscountAmount()
 			# 2019-10-31
-			# Orders: «VariantID for lineItems is currently hardcoded as ''»:
-			# https://github.com/justuno-com/m1/issues/29
+			# Orders: «VariantID for lineItems is currently hardcoded as ''»: https://github.com/justuno-com/m1/issues/29
 			,'VariantId' => $i->getProductId()
 		];}, array_filter($o->getAllItems(), function(OI $i) {return !$i->getChildrenItems();})))
 		,'OrderNumber' => $o->getId()
@@ -97,8 +96,7 @@ final class Justuno_M1_Orders {
 	/**
 	 * 2019-11-07
 	 * 2019-11-07
-	 * 1) «Allowed memory size exausted» on `'OrdersCount' => $oc->count()`:
-	 * https://github.com/justuno-com/m1/issues/36
+	 * 1) «Allowed memory size exausted» on `'OrdersCount' => $oc->count()`: https://github.com/justuno-com/m1/issues/36
 	 * 2) I have replaced the customer collection with direct SQL queries.
 	 * @used-by ordersCount()
 	 * @used-by totalSpent()
@@ -108,8 +106,6 @@ final class Justuno_M1_Orders {
 	 */
 	private static function stat(O $o, $v) {
 		$k = $o->getCustomerId() ? 'customer_id' : 'customer_email'; /** @var string $k */
-		return DB::conn()->fetchOne(
-			DB::select()->from(DB::t('sales_flat_order'), ['v' => $v])->where("? = $k", $o[$k])
-		);
+		return DB::conn()->fetchOne(DB::select()->from(DB::t('sales_flat_order'), ['v' => $v])->where("? = $k", $o[$k]));
 	}
 }
