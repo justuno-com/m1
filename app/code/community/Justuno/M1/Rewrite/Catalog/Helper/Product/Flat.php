@@ -13,7 +13,7 @@ final class Justuno_M1_Rewrite_Catalog_Helper_Product_Flat extends Mage_Catalog_
 	 * 2020-11-27
 	 * @override
 	 * @see Mage_Catalog_Helper_Product_Flat::isEnabled()
-	 * @used-by \Mage_Catalog_Model_Resource_Product_Collection::isEnabledFlat()
+	 * @used-by Mage_Catalog_Model_Resource_Product_Collection::isEnabledFlat()
 	 * @param int|string|null|Mage_Core_Model_Store $store
 	 * @return bool
 	 */
