@@ -61,7 +61,7 @@ final class Justuno_M1_Response {
 	}
 
 	/**
-	 * 2021-01-29
+	 * 2021-01-29 "Make the module multi-store aware": https://github.com/justuno-com/m1/issues/51
 	 * @used-by p()
 	 * @return S
 	 * @throws E

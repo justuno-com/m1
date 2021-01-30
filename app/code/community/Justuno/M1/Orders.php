@@ -3,6 +3,7 @@ use Justuno_M1_DB as DB;
 use Justuno_M1_Filter as Filter;
 use Justuno_M1_OI as OIH;
 use Justuno_M1_Response as R;
+use Mage_Core_Model_Store as S;
 use Mage_Customer_Model_Customer as C;
 use Mage_Sales_Model_Order as O;
 use Mage_Sales_Model_Order_Address as A;
@@ -14,7 +15,7 @@ final class Justuno_M1_Orders {
 	 * 2019-10-31
 	 * @used-by Justuno_M1_ResponseController::ordersAction()
 	 */
-	static function p() {R::p(function() {return array_values(array_map(function(O $o) {return [
+	static function p() {R::p(function(S $s) {return array_values(array_map(function(O $o) {return [
 		'CountryCode' => $o->getBillingAddress()->getCountryId()
 		,'CreatedAt' => $o->getCreatedAt()
 		,'Currency' => $o->getOrderCurrencyCode()
@@ -52,7 +53,8 @@ final class Justuno_M1_Orders {
 		,'TotalPrice' => (float)$o->getGrandTotal()
 		,'TotalTax' => (float)$o->getTaxAmount()
 		,'UpdatedAt' => $o->getUpdatedAt()
-	];}, Filter::p(new OC)->getItems()));});}
+	# 2021-01-30 "Make the module multi-store aware": https://github.com/justuno-com/m1/issues/51
+	];}, Filter::p(new OC)->addFieldToFilter('store_id', $s->getId())->getItems()));});}
 
 	/**
 	 * 2019-10-27

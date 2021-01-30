@@ -2,12 +2,13 @@
 use Justuno_M1_Filter as Filter;
 use Justuno_M1_Lib as L;
 use Justuno_M1_Response as R;
-use Justuno_M1_Settings as S;
+use Justuno_M1_Settings as Ss;
 use Mage_Catalog_Model_Category as C;
 use Mage_Catalog_Model_Product as P;
 use Mage_Catalog_Model_Product_Visibility as V;
 use Mage_Catalog_Model_Resource_Category_Collection as CC;
 use Mage_Catalog_Model_Resource_Product_Collection as PC;
+use Mage_Core_Model_Store as S;
 use Mage_Review_Model_Review_Summary as RS;
 use Mage_Tag_Model_Resource_Tag_Collection as TC;
 use Mage_Tag_Model_Tag as T;
@@ -17,7 +18,7 @@ final class Justuno_M1_Catalog {
 	 * 2019-10-31
 	 * @used-by Justuno_M1_ResponseController::catalogAction()
 	 */
-	static function p() {R::p(function() {
+	static function p() {R::p(function(S $s) {
 		/**
 		 * 2020-11-27
 		 * 1) "Disable the «Use Flat Catalog Product» option for the `jumagext/response/catalog` request":
@@ -29,6 +30,7 @@ final class Justuno_M1_Catalog {
 		 */
 		Justuno_M1_Rewrite_Catalog_Helper_Product_Flat::$JU_DISABLE = true;
 		$pc = new PC; /** @var PC $pc */
+		$pc->addStoreFilter($s); # 2021-01-30 "Make the module multi-store aware": https://github.com/justuno-com/m1/issues/51
 		$pc->addAttributeToSelect('*');
 		/**
 		 * 2019-10-30
@@ -42,7 +44,7 @@ final class Justuno_M1_Catalog {
 		$pc->addAttributeToFilter('visibility', ['in' => [
 			V::VISIBILITY_BOTH, V::VISIBILITY_IN_CATALOG, V::VISIBILITY_IN_SEARCH
 		]]);
-		$brand = S::brand(); /** @var string $brand */
+		$brand = Ss::brand(); /** @var string $brand */
 		return array_values(array_map(function(P $p) use($brand) { /** @var array(string => mixed) $r */
 			$rs = new RS; /** @var RS $rs */
 			$rs->load($p->getId());
