@@ -1,4 +1,5 @@
 <?php
+use DateTimeZone as TZ;
 use Justuno_M1_Lib as L;
 use Mage_Catalog_Model_Resource_Product_Collection as PC;
 use Mage_Sales_Model_Resource_Order_Collection as OC;
@@ -36,7 +37,7 @@ final class Justuno_M1_Filter {
 	private static function byDate(C $c) {
 		if ($since = L::req('updatedSince')) { /** @var string $since */
 			# 2021-03-24 "`updatedSince` should be interpreted in the UTC timezone": https://github.com/justuno-com/m1/issues/55
-			$tz = new DateTimeZone(DateTimeZone::UTC); /** @var DateTimeZone $tz */
+			$tz = new TZ(TZ::UTC); /** @var TZ $tz */
 			/**
 			 * 2019-10-31
 			 * @param string $s
