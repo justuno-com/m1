@@ -48,19 +48,22 @@ final class Justuno_M1_Catalog_Variants {
 	private static function variant(P $p, P $parent = null, $opts = []) {
 		$si = new SI; /** @var SI $si */
 		$si->loadByProduct($p);
+		$h = Mage::helper('cataloginventory'); /** @var Mage_CatalogInventory_Helper_Data $h */
+		$h->isQty($p->getTypeId());
 		$r = [
 			'ID' => $p->getId()
-			/**
-			 * 2019-10-30
-			 * «if a product has a Status of "Disabled" we'd still want it in the feed,
-			 * but we'd want to set the inventoryquantity to -9999»:
-			 * https://github.com/justuno-com/m1/issues/4
-			 * 2019-11-06
-			 * «if I set the parent product to disabled,
-			 * all the variants that are not disabled still show their entered inventory»:
-			 * https://github.com/justuno-com/m1/issues/35
-			 */
-			,'InventoryQuantity' => $p->isDisabled() || ($parent && $parent->isDisabled()) ? -9999 : (int)$si->getQty()
+			# 2019-10-30
+			# «if a product has a Status of "Disabled" we'd still want it in the feed,
+			# but we'd want to set the inventoryquantity to -9999»:
+			# https://github.com/justuno-com/m1/issues/4
+			# 2019-11-06
+			# «if I set the parent product to disabled,
+			# all the variants that are not disabled still show their entered inventory»:
+			# https://github.com/justuno-com/m1/issues/35
+			,'InventoryQuantity' =>
+				# 2021-10-11
+				# "Return «-9999» as quantity for grouped and bundled products": https://github.com/justuno-com/m1/issues/58
+				$p->isDisabled() || ($parent && $parent->isDisabled()) || !L::hasQty($p) ? -9999 : (int)$si->getQty()
 			# 2019-10-30
 			# 1) «MSRP, Price, SalePrice, Variants.MSRP, and Variants.SalePrice all need to be Floats,
 			# or if that is not possible then Ints»: https://github.com/justuno-com/m1/issues/10

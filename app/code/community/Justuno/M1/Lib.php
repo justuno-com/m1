@@ -76,6 +76,16 @@ final class Justuno_M1_Lib {
 	 * @return mixed|null
 	 */
 	static function first(array $a) {return !$a ? null : reset($a);}
+
+	/**
+	 * 2021-10-11
+	 * @used-by \Justuno_M1_Catalog_Variants::variant()
+	 * @param P|string $t
+	 */
+	static function hasQty($t) {
+		$h = Mage::helper('cataloginventory'); /** @var Mage_CatalogInventory_Helper_Data $h */
+		return $h->isQty(is_string($t) ? $t : $t->getTypeId());
+	}
 	
 	/**
 	 * 2020-01-15
